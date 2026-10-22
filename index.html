@@ -27,21 +27,28 @@
     <link href="static/css/style.css" rel="stylesheet">
 
 <style id="before-after-custom-fixes">
-/* Keep captions independent from the draggable comparison clip, especially on mobile. */
-#main-slider-four .tp-caption[data-type="text"] { -webkit-transform: translateZ(0); transform: translateZ(0); }
-#main-slider-four .tp-caption[data-type="text"]:not([data-beforeafter]) { z-index: 30 !important; }
-/* Slide 3 starts with the Before image covering the After image. */
-#main-slider-four .oops-before-cover {
-    position: absolute; inset: 0; z-index: 10; pointer-events: none;
-    background-image: url("static/picture/slide-03-before.jpg");
-    background-position: center center; background-size: cover; background-repeat: no-repeat;
-    opacity: 1; transition: opacity 700ms ease;
+/* Keep the native Revolution Before/After comparison interactive. */
+#main-slider-four .tp-caption[data-type="text"] {
+    -webkit-transform: translateZ(0);
+    transform: translateZ(0);
 }
-#main-slider-four .oops-before-cover.is-revealed { opacity: 0; }
-#main-slider-four .oops-reveal-button { pointer-events: auto; transition: opacity 500ms ease, visibility 500ms ease; }
-#main-slider-four .oops-reveal-button.is-hidden { opacity: 0 !important; visibility: hidden !important; pointer-events: none; }
+/* Keep the slogan above the image comparison clip so it remains readable while dragging. */
+#main-slider-four li > .tp-caption[data-type="text"][data-beforeafter="before"]:last-of-type {
+    z-index: 40 !important;
+}
+#main-slider-four .oops-reveal-button {
+    pointer-events: auto;
+    transition: opacity 500ms ease, visibility 500ms ease;
+}
+#main-slider-four .oops-reveal-button.is-hidden {
+    opacity: 0 !important;
+    visibility: hidden !important;
+    pointer-events: none;
+}
 @media (max-width: 767px) {
-    #main-slider-four .tp-caption:not([data-beforeafter]) { white-space: normal !important; }
+    #main-slider-four .tp-caption[data-type="text"] {
+        white-space: normal !important;
+    }
 }
 </style>
 
@@ -150,7 +157,7 @@
                     <div class="tp-caption tp-resizeme rs-parallaxlevel-5" data-x="['center','center','center','center']" data-hoffset="['0','0','0','0']" data-y="['middle','middle','middle','middle']" data-voffset="['0','0','0','0']" data-fontsize="['60','60','60','50']" data-whitespace="nowrap" data-responsive_offset="on" data-width="['none','none','none','none']" data-type="text" data-textalign="['center','center','center','center']" data-beforeafter="before" data-transform_idle="o:1;" data-transform_in="z:0;rX:0;rY:0;rZ:0;sX:0.9;sY:0.9;skX:0;skY:0;opacity:0;s:1500;e:Power3.easeInOut;" data-transform_out="y:[100%];s:1000;e:Power2.easeInOut;s:1000;e:Power2.easeInOut;" data-mask_out="x:inherit;y:inherit;s:inherit;e:inherit;" data-start="1200" data-splitin="none" data-splitout="none" style="z-index:2; font-weight: 700; letter-spacing: 1px; color: #ffffff; font-family: 'Poppins', sans-serif;text-transform:capitalize">Tomorrow.</div><div class="tp-caption tp-resizeme rs-parallaxlevel-5" data-x="['center','center','center','center']" data-hoffset="['0','0','0','0']" data-y="['middle','middle','middle','middle']" data-voffset="['0','0','0','0']" data-fontsize="['60','60','60','50']" data-whitespace="nowrap" data-responsive_offset="on" data-width="['none','none','none','none']" data-type="text" data-textalign="['center','center','center','center']" data-beforeafter="after" data-transform_idle="o:1;" data-transform_in="z:0;rX:0;rY:0;rZ:0;sX:0.9;sY:0.9;skX:0;skY:0;opacity:0;s:1500;e:Power3.easeInOut;" data-transform_out="y:[100%];s:1000;e:Power2.easeInOut;s:1000;e:Power2.easeInOut;" data-mask_out="x:inherit;y:inherit;s:inherit;e:inherit;" data-start="1200" data-splitin="none" data-splitout="none" style="z-index:2; font-weight: 700; letter-spacing: 1px; color: #ffffff; font-family: 'Poppins', sans-serif;text-transform:capitalize">Tomorrow.</div>
                     <div class="tp-caption tp-resizeme rs-parallaxlevel-5" data-x="['center','center','center','center']" data-hoffset="['0','0','0','0']" data-y="['middle','middle','middle','middle']" data-voffset="['0','0','0','0']" data-fontsize="['60','60','60','50']" data-whitespace="nowrap" data-responsive_offset="on" data-width="['none','none','none','none']" data-type="text" data-textalign="['center','center','center','center']" data-beforeafter="before" data-transform_idle="o:1;" data-transform_in="y:[100%];z:0;rX:0deg;rY:0;rZ:0;sX:1;sY:1;skX:0;skY:0;opacity:0;s:2000;e:Power4.easeInOut;" data-transform_out="s:1000;e:Power2.easeInOut;s:1000;e:Power2.easeInOut;" data-start="1000" data-splitin="none" data-splitout="none" style="display:none; z-index:3; font-weight: 100; color: #ffffff; font-family: 'Poppins', sans-serif;text-transform:capitalize"></div>
                     <div class="tp-caption tp-resizeme rs-parallaxlevel-5" data-x="['center','center','center','center']" data-hoffset="['0','0','0','0']" data-y="['middle','middle','middle','middle']" data-voffset="['0','0','0','0']" data-fontsize="['60','60','60','50']" data-whitespace="nowrap" data-responsive_offset="on" data-width="['none','none','none','none']" data-type="text" data-textalign="['center','center','center','center']" data-beforeafter="after" data-transform_idle="o:1;" data-transform_in="y:[100%];z:0;rX:0deg;rY:0;rZ:0;sX:1;sY:1;skX:0;skY:0;opacity:0;s:2000;e:Power4.easeInOut;" data-transform_out="s:1000;e:Power2.easeInOut;s:1000;e:Power2.easeInOut;" data-start="1000" data-splitin="none" data-splitout="none" style="display:none; z-index:3; font-weight: 100; color: #ffffff; font-family: 'Poppins', sans-serif;text-transform:capitalize"></div>
-                    <div class="tp-caption tp-resizeme" data-x="['center','center','center','center']" data-hoffset="['0','0','0','0']" data-y="['middle','middle','middle','middle']" data-voffset="['70','70','70','70']" data-fontsize="['22','22','18','18']" data-whitespace="normal" data-responsive_offset="on" data-width="['900px','900px','80%','85%']" data-type="text" data-textalign="['center','center','center','center']" data-beforeafter="before" data-transform_idle="o:1;" data-transform_in="z:0;rX:0deg;rY:0;rZ:0;sX:2;sY:2;skX:0;skY:0;opacity:0;s:1000;e:Power2.easeOut;" data-transform_out="s:1000;e:Power3.easeInOut;s:1000;e:Power3.easeInOut;" data-mask_in="x:0px;y:0px;s:inherit;e:inherit;" data-start="1500" data-splitin="none" data-splitout="none" style="z-index:4; font-weight: 100; color: #ffffff; line-height:30px;  font-family: 'Open Sans', sans-serif;text-transform:capitalize">Where Vision Becomes Reality. Every Prompt Is the Beginning of Something Unexpected.</div>
+                    <div class="tp-caption tp-resizeme" data-x="['center','center','center','center']" data-hoffset="['0','0','0','0']" data-y="['middle','middle','middle','middle']" data-voffset="['70','70','70','70']" data-fontsize="['22','22','18','18']" data-whitespace="normal" data-responsive_offset="on" data-width="['900px','900px','80%','85%']" data-type="text" data-textalign="['center','center','center','center']" data-transform_idle="o:1;" data-transform_in="z:0;rX:0deg;rY:0;rZ:0;sX:2;sY:2;skX:0;skY:0;opacity:0;s:1000;e:Power2.easeOut;" data-transform_out="s:1000;e:Power3.easeInOut;s:1000;e:Power3.easeInOut;" data-mask_in="x:0px;y:0px;s:inherit;e:inherit;" data-start="1500" data-splitin="none" data-splitout="none" style="z-index:40; font-weight: 100; color: #ffffff; line-height:30px;  font-family: 'Open Sans', sans-serif;text-transform:capitalize">Where Vision Becomes Reality. Every Prompt Is the Beginning of Something Unexpected.</div>
                     <div class="tp-caption tp-resizeme" id="slide-24-layer-129" data-x="['center','center','center','center']" data-hoffset="['0','0','0','0']" data-y="['bottom','bottom','bottom','bottom']" data-voffset="['140','70','70','130']" data-width="['160','160','160','160']" data-frames='[{"delay":600,"speed":2000,"frame":"0","from":"sX:1;sY:1;opacity:0;fb:40px;","to":"o:1;fb:0;","ease":"Power4.easeInOut"},{"delay":"wait","speed":300,"frame":"999","to":"opacity:0;fb:0;","ease":"Power3.easeInOut"}]' data-textalign="['center','center','center','center']" style="z-index:99; max-width: 960px">
                         <a href="javascript:void(0);" class="scroll btn btn-large btn-rounded btn-blue color-white link">get started</a>
                     </div>
@@ -167,7 +174,7 @@
                     <div class="tp-caption tp-resizeme rs-parallaxlevel-5" data-x="['center','center','center','center']" data-hoffset="['0','0','0','0']" data-y="['middle','middle','middle','middle']" data-voffset="['-70','-70','-70','-70']" data-fontsize="['60','60','60','50']" data-whitespace="nowrap" data-responsive_offset="on" data-width="['none','none','none','none']" data-type="text" data-textalign="['center','center','center','center']" data-beforeafter="after" data-transform_idle="o:1;" data-transform_in="z:0;rX:0;rY:0;rZ:0;sX:0.9;sY:0.9;skX:0;skY:0;opacity:0;s:1500;e:Power3.easeInOut;" data-transform_out="y:[100%];s:1000;e:Power2.easeInOut;s:1000;e:Power2.easeInOut;" data-mask_out="x:inherit;y:inherit;s:inherit;e:inherit;" data-start="1200" data-splitin="none" data-splitout="none" style="z-index:2; font-weight: 700; letter-spacing: 1px; color: #ffffff; font-family: 'Poppins', sans-serif;text-transform:capitalize">Never Really</div>
                     <div class="tp-caption tp-resizeme rs-parallaxlevel-5" data-x="['center','center','center','center']" data-hoffset="['0','0','0','0']" data-y="['middle','middle','middle','middle']" data-voffset="['0','0','0','0']" data-fontsize="['60','60','60','50']" data-whitespace="nowrap" data-responsive_offset="on" data-width="['none','none','none','none']" data-type="text" data-textalign="['center','center','center','center']" data-beforeafter="before" data-transform_idle="o:1;" data-transform_in="y:[100%];z:0;rX:0deg;rY:0;rZ:0;sX:1;sY:1;skX:0;skY:0;opacity:0;s:2000;e:Power4.easeInOut;" data-transform_out="s:1000;e:Power2.easeInOut;s:1000;e:Power2.easeInOut;" data-start="1000" data-splitin="none" data-splitout="none" style="z-index:3; font-weight: 100; color: #ffffff; font-family: 'Poppins', sans-serif;text-transform:capitalize">Leave You.</div>
                     <div class="tp-caption tp-resizeme rs-parallaxlevel-5" data-x="['center','center','center','center']" data-hoffset="['0','0','0','0']" data-y="['middle','middle','middle','middle']" data-voffset="['0','0','0','0']" data-fontsize="['60','60','60','50']" data-whitespace="nowrap" data-responsive_offset="on" data-width="['none','none','none','none']" data-type="text" data-textalign="['center','center','center','center']" data-beforeafter="after" data-transform_idle="o:1;" data-transform_in="y:[100%];z:0;rX:0deg;rY:0;rZ:0;sX:1;sY:1;skX:0;skY:0;opacity:0;s:2000;e:Power4.easeInOut;" data-transform_out="s:1000;e:Power2.easeInOut;s:1000;e:Power2.easeInOut;" data-start="1000" data-splitin="none" data-splitout="none" style="z-index:3; font-weight: 100; color: #ffffff; font-family: 'Poppins', sans-serif;text-transform:capitalize">Leave You.</div>
-                    <div class="tp-caption tp-resizeme" data-x="['center','center','center','center']" data-hoffset="['0','0','0','0']" data-y="['middle','middle','middle','middle']" data-voffset="['70','70','70','70']" data-fontsize="['22','22','18','18']" data-whitespace="normal" data-responsive_offset="on" data-width="['900px','900px','80%','85%']" data-type="text" data-textalign="['center','center','center','center']" data-beforeafter="before" data-transform_idle="o:1;" data-transform_in="z:0;rX:0deg;rY:0;rZ:0;sX:2;sY:2;skX:0;skY:0;opacity:0;s:1000;e:Power2.easeOut;" data-transform_out="s:1000;e:Power3.easeInOut;s:1000;e:Power3.easeInOut;" data-mask_in="x:0px;y:0px;s:inherit;e:inherit;" data-start="1500" data-splitin="none" data-splitout="none" style="z-index:4; font-weight: 100; color: #ffffff; line-height:30px;  font-family: 'Open Sans', sans-serif;text-transform:capitalize">To Chase the Future, I Left. A Part of Me Never Did.</div>
+                    <div class="tp-caption tp-resizeme" data-x="['center','center','center','center']" data-hoffset="['0','0','0','0']" data-y="['middle','middle','middle','middle']" data-voffset="['70','70','70','70']" data-fontsize="['22','22','18','18']" data-whitespace="normal" data-responsive_offset="on" data-width="['900px','900px','80%','85%']" data-type="text" data-textalign="['center','center','center','center']" data-transform_idle="o:1;" data-transform_in="z:0;rX:0deg;rY:0;rZ:0;sX:2;sY:2;skX:0;skY:0;opacity:0;s:1000;e:Power2.easeOut;" data-transform_out="s:1000;e:Power3.easeInOut;s:1000;e:Power3.easeInOut;" data-mask_in="x:0px;y:0px;s:inherit;e:inherit;" data-start="1500" data-splitin="none" data-splitout="none" style="z-index:40; font-weight: 100; color: #ffffff; line-height:30px;  font-family: 'Open Sans', sans-serif;text-transform:capitalize">To Chase the Future, I Left. A Part of Me Never Did.</div>
                     <div class="tp-caption tp-resizeme" id="slide-24-layer-130" data-x="['center','center','center','center']" data-hoffset="['0','0','0','0']" data-y="['bottom','bottom','bottom','bottom']" data-voffset="['140','70','70','130']" data-width="['160','160','160','160']" data-frames='[{"delay":600,"speed":2000,"frame":"0","from":"sX:1;sY:1;opacity:0;fb:40px;","to":"o:1;fb:0;","ease":"Power4.easeInOut"},{"delay":"wait","speed":300,"frame":"999","to":"opacity:0;fb:0;","ease":"Power3.easeInOut"}]' data-textalign="['center','center','center','center']" style="z-index:99; max-width: 960px">
                         <a href="javascript:void(0);" class="scroll btn btn-large btn-rounded btn-blue color-white link">get started
                         </a>
@@ -178,7 +185,6 @@
                 <li data-index="rs-966" data-transition="fade" data-slotamount="default" data-hideafterloop="0" data-hideslideonmobile="off" data-easein="default" data-easeout="default" data-masterspeed="default" data-thumb="../../assets/image/night-100x50.jpg" data-rotate="0" data-saveperformance="off" data-title="Slide" data-param1="" data-param2="" data-param3="" data-param4="" data-param5="" data-param6="" data-param7="" data-param8="" data-param9="" data-param10="" data-description="" data-beforeafter='{"moveto":"50%|50%|50%|50%","bgColor":"","bgType":"image","bgImage":"static/picture/slide-03-before.jpg","bgFit":"cover","bgPos":"center center","bgRepeat":"no-repeat","direction":"horizontal","easing":"Power2.easeInOut","delay":"500","time":"750","out":"fade","carousel":false}'>
                     <!-- MAIN IM AGE -->
                     <img src="static/picture/slide-03-after.jpg" alt="" data-bgposition="center center" data-kenburns="on" data-duration="5000" data-ease="Power4.easeOut" data-scalestart="150" data-scaleend="100" data-rotatestart="0" data-rotateend="0" data-blurstart="30" data-blurend="0" data-offsetstart="0 0" data-offsetend="0 0" data-bgparallax="off" class="rev-slidebg" data-no-retina="">
-                    <div class="oops-before-cover" aria-hidden="true"></div>
                     <!-- LAYERS -->
                     <div class="tp-caption tp-resizeme rs-parallaxlevel-5" data-x="['center','center','center','center']" data-hoffset="['0','0','0','0']" data-y="['middle','middle','middle','middle']" data-voffset="['-140','-140','-140','-140']" data-fontsize="['60','60','60','50']" data-whitespace="nowrap" data-responsive_offset="on" data-width="['none','none','none','none']" data-type="text" data-textalign="['center','center','center','center']" data-beforeafter="before" data-transform_idle="o:1;" data-transform_in="x:-50px;opacity:0;s:2000;e:Power3.easeOut;" data-transform_out="s:1000;e:Power3.easeInOut;s:1000;e:Power3.easeInOut;" data-start="1000" data-splitin="none" data-splitout="none" style="z-index:1; font-weight: 100; color: #ffffff; font-family: 'Poppins', sans-serif;text-transform:capitalize">Between What</div>
                     <div class="tp-caption tp-resizeme rs-parallaxlevel-5" data-x="['center','center','center','center']" data-hoffset="['0','0','0','0']" data-y="['middle','middle','middle','middle']" data-voffset="['-140','-140','-140','-140']" data-fontsize="['60','60','60','50']" data-whitespace="nowrap" data-responsive_offset="on" data-width="['none','none','none','none']" data-type="text" data-textalign="['center','center','center','center']" data-beforeafter="after" data-transform_idle="o:1;" data-transform_in="x:-50px;opacity:0;s:2000;e:Power3.easeOut;" data-transform_out="s:1000;e:Power3.easeInOut;s:1000;e:Power3.easeInOut;" data-start="1000" data-splitin="none" data-splitout="none" style="z-index:1; font-weight: 100; color: #ffffff; font-family: 'Poppins', sans-serif;text-transform:capitalize">Between What</div>
@@ -189,7 +195,7 @@
                     <div class="tp-caption tp-resizeme rs-parallaxlevel-5" data-x="['center','center','center','center']" data-hoffset="['0','0','0','0']" data-y="['middle','middle','middle','middle']" data-voffset="['0','0','0','0']" data-fontsize="['60','60','60','50']" data-whitespace="nowrap" data-responsive_offset="on" data-width="['none','none','none','none']" data-type="text" data-textalign="['center','center','center','center']" data-beforeafter="before" data-transform_idle="o:1;" data-transform_in="y:[100%];z:0;rX:0deg;rY:0;rZ:0;sX:1;sY:1;skX:0;skY:0;opacity:0;s:2000;e:Power4.easeInOut;" data-transform_out="s:1000;e:Power2.easeInOut;s:1000;e:Power2.easeInOut;" data-start="1000" data-splitin="none" data-splitout="none" style="z-index:3; font-weight: 100; color: #ffffff; font-family: 'Poppins', sans-serif;text-transform:capitalize">Will Be.</div>
                     <div class="tp-caption tp-resizeme rs-parallaxlevel-5" data-x="['center','center','center','center']" data-hoffset="['0','0','0','0']" data-y="['middle','middle','middle','middle']" data-voffset="['0','0','0','0']" data-fontsize="['60','60','60','50']" data-whitespace="nowrap" data-responsive_offset="on" data-width="['none','none','none','none']" data-type="text" data-textalign="['center','center','center','center']" data-beforeafter="after" data-transform_idle="o:1;" data-transform_in="y:[100%];z:0;rX:0deg;rY:0;rZ:0;sX:1;sY:1;skX:0;skY:0;opacity:0;s:2000;e:Power4.easeInOut;" data-transform_out="s:1000;e:Power2.easeInOut;s:1000;e:Power2.easeInOut;" data-start="1000" data-splitin="none" data-splitout="none" style="z-index:3; font-weight: 100; color: #ffffff; font-family: 'Poppins', sans-serif;text-transform:capitalize">Will Be.</div>
 
-                    <div class="tp-caption tp-resizeme" data-x="['center','center','center','center']" data-hoffset="['0','0','0','0']" data-y="['middle','middle','middle','middle']" data-voffset="['70','70','70','70']" data-fontsize="['22','22','18','18']" data-whitespace="normal" data-responsive_offset="on" data-width="['900px','900px','80%','85%']" data-type="text" data-textalign="['center','center','center','center']" data-beforeafter="before" data-transform_idle="o:1;" data-transform_in="z:0;rX:0deg;rY:0;rZ:0;sX:2;sY:2;skX:0;skY:0;opacity:0;s:1000;e:Power2.easeOut;" data-transform_out="s:1000;e:Power3.easeInOut;s:1000;e:Power3.easeInOut;" data-mask_in="x:0px;y:0px;s:inherit;e:inherit;" data-start="1500" data-splitin="none" data-splitout="none" style="z-index:4; font-weight: 100; color: #ffffff; line-height:30px;  font-family: 'Open Sans', sans-serif;text-transform:capitalize">The Moment Connecting Past and Future.</div>
+                    <div class="tp-caption tp-resizeme" data-x="['center','center','center','center']" data-hoffset="['0','0','0','0']" data-y="['middle','middle','middle','middle']" data-voffset="['70','70','70','70']" data-fontsize="['22','22','18','18']" data-whitespace="normal" data-responsive_offset="on" data-width="['900px','900px','80%','85%']" data-type="text" data-textalign="['center','center','center','center']" data-transform_idle="o:1;" data-transform_in="z:0;rX:0deg;rY:0;rZ:0;sX:2;sY:2;skX:0;skY:0;opacity:0;s:1000;e:Power2.easeOut;" data-transform_out="s:1000;e:Power3.easeInOut;s:1000;e:Power3.easeInOut;" data-mask_in="x:0px;y:0px;s:inherit;e:inherit;" data-start="1500" data-splitin="none" data-splitout="none" style="z-index:40; font-weight: 100; color: #ffffff; line-height:30px;  font-family: 'Open Sans', sans-serif;text-transform:capitalize">The Moment Connecting Past and Future.</div>
 
                     <div class="tp-caption tp-resizeme" id="slide-24-layer-128" data-x="['center','center','center','center']" data-hoffset="['0','0','0','0']" data-y="['bottom','bottom','bottom','bottom']" data-voffset="['140','70','70','130']" data-width="['160','160','160','160']" data-frames='[{"delay":600,"speed":2000,"frame":"0","from":"sX:1;sY:1;opacity:0;fb:40px;","to":"o:1;fb:0;","ease":"Power4.easeInOut"},{"delay":"wait","speed":300,"frame":"999","to":"opacity:0;fb:0;","ease":"Power3.easeInOut"}]' data-textalign="['center','center','center','center']" style="z-index:99; max-width: 960px">
                         <a href="javascript:void(0);" class="btn btn-large btn-rounded btn-blue color-white link oops-reveal-button" type="button" aria-label="Reveal the after image">Oops.
@@ -630,39 +636,19 @@
 <script src="static/js/jquery.pagepiling.min.js"></script>
 <script src="static/js/swiper-thumbnail.js"></script>
 <script src="static/js/contact_us.js"></script>
-<script>
-(function () {
-    var sliderList = document.querySelector("#main-slider-four > ul");
-    if (!sliderList) return;
-    var slides = Array.prototype.slice.call(sliderList.children).filter(function (node) { return node.tagName === "LI"; });
-    if (slides.length < 2) return;
-    var offset = Math.floor(Math.random() * slides.length);
-    slides.slice(offset).concat(slides.slice(0, offset)).forEach(function (slide) { sliderList.appendChild(slide); });
-})();
-</script>
+
 <script src="static/js/script.js"></script>
 
 
 <script id="before-after-custom-fixes-js">
 (function () {
-    function revealAfterImage() {
-        var slider = document.getElementById('main-slider-four');
-        if (!slider) return;
-        var cover = slider.querySelector('.oops-before-cover');
-        var button = slider.querySelector('.oops-reveal-button');
-        if (!cover || cover.classList.contains('is-revealed')) return;
-        cover.classList.add('is-revealed');
-        if (button) button.classList.add('is-hidden');
-        window.setTimeout(function () {
-            if (cover && cover.parentNode) cover.parentNode.removeChild(cover);
-        }, 750);
-    }
     document.addEventListener('click', function (event) {
         var button = event.target.closest && event.target.closest('.oops-reveal-button');
         if (!button) return;
         event.preventDefault();
         event.stopPropagation();
-        revealAfterImage();
+        /* The native Before/After slider remains active and centered; only dismiss the prompt. */
+        button.classList.add('is-hidden');
     }, true);
 })();
 </script>
