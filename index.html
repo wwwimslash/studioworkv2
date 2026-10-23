@@ -25,33 +25,66 @@
     <link href="static/css/jquery.pagepiling.css" rel="stylesheet">
     <link rel="stylesheet" href="static/css/pagepiling.css">
     <link href="static/css/style.css" rel="stylesheet">
+<style>
 
-<style id="before-after-custom-fixes">
-/* Keep the native Revolution Before/After comparison interactive. */
-#main-slider-four .tp-caption[data-type="text"] {
-    -webkit-transform: translateZ(0);
-    transform: translateZ(0);
-}
-/* Keep the slogan above the image comparison clip so it remains readable while dragging. */
-#main-slider-four li > .tp-caption[data-type="text"][data-beforeafter="before"]:last-of-type {
-    z-index: 40 !important;
-}
-#main-slider-four .oops-reveal-button {
-    pointer-events: auto;
-    transition: opacity 500ms ease, visibility 500ms ease;
-}
-#main-slider-four .oops-reveal-button.is-hidden {
-    opacity: 0 !important;
-    visibility: hidden !important;
-    pointer-events: none;
-}
-@media (max-width: 767px) {
-    #main-slider-four .tp-caption[data-type="text"] {
-        white-space: normal !important;
+    /* Homepage slider cinematic-energy interaction */
+    #rev_slider_346_1_wrapper { --energy-level: .5; --slogan-opacity: 1; }
+    #rev_slider_346_1_wrapper .cinematic-energy-overlay {
+        position: absolute; inset: 0; z-index: 80; overflow: hidden;
+        pointer-events: none; opacity: var(--energy-level, .5);
+        transition: opacity 180ms ease-out; mix-blend-mode: screen;
     }
-}
-</style>
+    #rev_slider_346_1_wrapper .cinematic-energy-overlay .energy-beam {
+        position: absolute; inset: -20% -40%; opacity: .8;
+        background: linear-gradient(105deg, transparent 38%, rgba(152,218,255,.025) 44%, rgba(186,230,255,.24) 49.5%, rgba(255,255,255,.65) 50%, rgba(131,203,255,.2) 50.6%, transparent 58%);
+        transform: translateX(-32%); filter: blur(5px);
+    }
+    #rev_slider_346_1_wrapper .cinematic-energy-overlay .energy-haze {
+        position: absolute; inset: 0; opacity: .7;
+        background: radial-gradient(ellipse at 50% 52%, rgba(117,195,255,.17), transparent 48%), radial-gradient(ellipse at 15% 80%, rgba(103,171,255,.10), transparent 42%);
+    }
+    #rev_slider_346_1_wrapper .cinematic-energy-overlay .energy-particle {
+        position: absolute; display: block; width: 3px; height: 3px; border-radius: 50%;
+        background: rgba(225,245,255,.95); box-shadow: 0 0 9px 2px rgba(115,195,255,.6);
+        opacity: .1; transform: translate3d(0,0,0);
+    }
+    #rev_slider_346_1_wrapper.energy-wave-active .energy-beam { animation: homepageEnergySweep 1.25s cubic-bezier(.2,.65,.25,1) both; }
+    #rev_slider_346_1_wrapper.energy-wave-active .energy-haze { animation: homepageEnergyFlash 1.25s ease-out both; }
+    #rev_slider_346_1_wrapper.energy-wave-active .energy-particle { animation: homepageParticleBurst 1.2s ease-out both; }
+    #rev_slider_346_1_wrapper.slogan-wave-hidden .tp-caption[data-type="text"] {
+        opacity: 0 !important; transition: opacity .8s ease !important;
+    }
+    #rev_slider_346_1_wrapper.energy-slogan-controlled .tp-caption[data-type="text"] {
+        opacity: var(--slogan-opacity, 1) !important;
+        transition: opacity .16s linear !important;
+    }
+    #rev_slider_346_1_wrapper.slogan-wave-hidden.energy-slogan-controlled .tp-caption[data-type="text"] {
+        opacity: 0 !important;
+    }
+    @keyframes homepageEnergySweep {
+        0% { transform: translateX(-38%); opacity: .15; }
+        35% { opacity: 1; }
+        100% { transform: translateX(38%); opacity: .15; }
+    }
+    @keyframes homepageEnergyFlash {
+        0% { opacity: .25; filter: brightness(1); }
+        28% { opacity: 1; filter: brightness(1.8); }
+        100% { opacity: .55; filter: brightness(1); }
+    }
+    @keyframes homepageParticleBurst {
+        0% { opacity: .15; transform: translate3d(0,0,0) scale(.7); }
+        35% { opacity: 1; }
+        100% { opacity: .05; transform: translate3d(var(--particle-x, 30px), var(--particle-y, -50px), 0) scale(1.5); }
+    }
+    @media (prefers-reduced-motion: reduce) {
+        #rev_slider_346_1_wrapper .cinematic-energy-overlay,
+        #rev_slider_346_1_wrapper .tp-caption[data-type="text"] { transition-duration: .01ms !important; }
+        #rev_slider_346_1_wrapper.energy-wave-active .energy-beam,
+        #rev_slider_346_1_wrapper.energy-wave-active .energy-haze,
+        #rev_slider_346_1_wrapper.energy-wave-active .energy-particle { animation-duration: .01ms !important; }
+    }
 
+</style>
 </head>
 
 <body data-spy="scroll" data-target=".navbar" data-offset="90">
@@ -147,26 +180,27 @@
         <div id="main-slider-four" class="rev_slider fullscreenbanner" style="display:none;" data-version="5.4.3.3">
             <ul>
                 <!-- Slide 1 -->
-                <li data-index="rs-964" data-transition="fade" data-slotamount="default" data-hideafterloop="0" data-hideslideonmobile="off" data-easein="default" data-easeout="default" data-masterspeed="default" data-thumb="../../assets/parallax/img/night-100x50.jpg" data-rotate="0" data-saveperformance="off" data-title="Slide" data-param1="" data-param2="" data-param3="" data-param4="" data-param5="" data-param6="" data-param7="" data-param8="" data-param9="" data-param10="" data-description="" data-beforeafter='{"moveto":"50%|50%|50%|50%","bgColor":"","bgType":"image","bgImage":"static/picture/slide-01-after.jpg","bgFit":"cover","bgPos":"center center","bgRepeat":"no-repeat","direction":"horizontal","easing":"Power2.easeInOut","delay":"500","time":"750","out":"fade","carousel":false}'>
+                <li data-index="rs-964" data-transition="fade" data-slotamount="default" data-hideafterloop="0" data-hideslideonmobile="off" data-easein="default" data-easeout="default" data-masterspeed="default" data-thumb="../../assets/parallax/img/night-100x50.jpg" data-rotate="0" data-saveperformance="off" data-title="Slide" data-param1="" data-param2="" data-param3="" data-param4="" data-param5="" data-param6="" data-param7="" data-param8="" data-param9="" data-param10="" data-description="" data-beforeafter='{"moveto":"50%|50%|50%|50%","bgColor":"","bgFit":"cover","bgPos":"center center","bgRepeat":"no-repeat","direction":"horizontal","easing":"Power2.easeInOut","delay":"500","time":"750","out":"fade","carousel":false}'>
                     <!-- MAIN IMAGE -->
                     <h2 class="d-none">sd</h2>
-                    <img src="static/picture/slide-01-before.jpg" alt="" data-bgposition="center center" data-kenburns="on" data-duration="5000" data-ease="Power4.easeOut" data-scalestart="150" data-scaleend="100" data-rotatestart="0" data-rotateend="0" data-blurstart="30" data-blurend="0" data-offsetstart="0 0" data-offsetend="0 0" data-bgparallax="off" class="rev-slidebg" data-no-retina="">
+                    <img src="static/picture/banner-12.jpg" alt="" data-bgposition="center center" data-kenburns="on" data-duration="5000" data-ease="Power4.easeOut" data-scalestart="150" data-scaleend="100" data-rotatestart="0" data-rotateend="0" data-blurstart="30" data-blurend="0" data-offsetstart="0 0" data-offsetend="0 0" data-bgparallax="off" class="rev-slidebg" data-no-retina="">
                     <!-- LAYERS -->
                     <div class="tp-caption tp-resizeme rs-parallaxlevel-5" data-x="['center','center','center','center']" data-hoffset="['0','0','0','0']" data-y="['middle','middle','middle','middle']" data-voffset="['-70','-70','-70','-70']" data-fontsize="['60','60','60','50']" data-whitespace="nowrap" data-responsive_offset="on" data-width="['none','none','none','none']" data-type="text" data-textalign="['center','center','center','center']" data-beforeafter="before" data-transform_idle="o:1;" data-transform_in="x:-50px;opacity:0;s:2000;e:Power3.easeOut;" data-transform_out="s:1000;e:Power3.easeInOut;s:1000;e:Power3.easeInOut;" data-start="1000" data-splitin="none" data-splitout="none" style="z-index:1; font-weight: 100; color: #ffffff; font-family: 'Poppins', sans-serif;text-transform:capitalize">Generate</div>
                     <div class="tp-caption tp-resizeme rs-parallaxlevel-5" data-x="['center','center','center','center']" data-hoffset="['0','0','0','0']" data-y="['middle','middle','middle','middle']" data-voffset="['-70','-70','-70','-70']" data-fontsize="['60','60','60','50']" data-whitespace="nowrap" data-responsive_offset="on" data-width="['none','none','none','none']" data-type="text" data-textalign="['center','center','center','center']" data-beforeafter="after" data-transform_idle="o:1;" data-transform_in="x:-50px;opacity:0;s:2000;e:Power3.easeOut;" data-transform_out="s:1000;e:Power3.easeInOut;s:1000;e:Power3.easeInOut;" data-start="1000" data-splitin="none" data-splitout="none" style="z-index:1; font-weight: 100; color: #ffffff; font-family: 'Poppins', sans-serif;text-transform:capitalize">Generate</div>
                     <div class="tp-caption tp-resizeme rs-parallaxlevel-5" data-x="['center','center','center','center']" data-hoffset="['0','0','0','0']" data-y="['middle','middle','middle','middle']" data-voffset="['0','0','0','0']" data-fontsize="['60','60','60','50']" data-whitespace="nowrap" data-responsive_offset="on" data-width="['none','none','none','none']" data-type="text" data-textalign="['center','center','center','center']" data-beforeafter="before" data-transform_idle="o:1;" data-transform_in="z:0;rX:0;rY:0;rZ:0;sX:0.9;sY:0.9;skX:0;skY:0;opacity:0;s:1500;e:Power3.easeInOut;" data-transform_out="y:[100%];s:1000;e:Power2.easeInOut;s:1000;e:Power2.easeInOut;" data-mask_out="x:inherit;y:inherit;s:inherit;e:inherit;" data-start="1200" data-splitin="none" data-splitout="none" style="z-index:2; font-weight: 700; letter-spacing: 1px; color: #ffffff; font-family: 'Poppins', sans-serif;text-transform:capitalize">Tomorrow.</div><div class="tp-caption tp-resizeme rs-parallaxlevel-5" data-x="['center','center','center','center']" data-hoffset="['0','0','0','0']" data-y="['middle','middle','middle','middle']" data-voffset="['0','0','0','0']" data-fontsize="['60','60','60','50']" data-whitespace="nowrap" data-responsive_offset="on" data-width="['none','none','none','none']" data-type="text" data-textalign="['center','center','center','center']" data-beforeafter="after" data-transform_idle="o:1;" data-transform_in="z:0;rX:0;rY:0;rZ:0;sX:0.9;sY:0.9;skX:0;skY:0;opacity:0;s:1500;e:Power3.easeInOut;" data-transform_out="y:[100%];s:1000;e:Power2.easeInOut;s:1000;e:Power2.easeInOut;" data-mask_out="x:inherit;y:inherit;s:inherit;e:inherit;" data-start="1200" data-splitin="none" data-splitout="none" style="z-index:2; font-weight: 700; letter-spacing: 1px; color: #ffffff; font-family: 'Poppins', sans-serif;text-transform:capitalize">Tomorrow.</div>
                     <div class="tp-caption tp-resizeme rs-parallaxlevel-5" data-x="['center','center','center','center']" data-hoffset="['0','0','0','0']" data-y="['middle','middle','middle','middle']" data-voffset="['0','0','0','0']" data-fontsize="['60','60','60','50']" data-whitespace="nowrap" data-responsive_offset="on" data-width="['none','none','none','none']" data-type="text" data-textalign="['center','center','center','center']" data-beforeafter="before" data-transform_idle="o:1;" data-transform_in="y:[100%];z:0;rX:0deg;rY:0;rZ:0;sX:1;sY:1;skX:0;skY:0;opacity:0;s:2000;e:Power4.easeInOut;" data-transform_out="s:1000;e:Power2.easeInOut;s:1000;e:Power2.easeInOut;" data-start="1000" data-splitin="none" data-splitout="none" style="display:none; z-index:3; font-weight: 100; color: #ffffff; font-family: 'Poppins', sans-serif;text-transform:capitalize"></div>
                     <div class="tp-caption tp-resizeme rs-parallaxlevel-5" data-x="['center','center','center','center']" data-hoffset="['0','0','0','0']" data-y="['middle','middle','middle','middle']" data-voffset="['0','0','0','0']" data-fontsize="['60','60','60','50']" data-whitespace="nowrap" data-responsive_offset="on" data-width="['none','none','none','none']" data-type="text" data-textalign="['center','center','center','center']" data-beforeafter="after" data-transform_idle="o:1;" data-transform_in="y:[100%];z:0;rX:0deg;rY:0;rZ:0;sX:1;sY:1;skX:0;skY:0;opacity:0;s:2000;e:Power4.easeInOut;" data-transform_out="s:1000;e:Power2.easeInOut;s:1000;e:Power2.easeInOut;" data-start="1000" data-splitin="none" data-splitout="none" style="display:none; z-index:3; font-weight: 100; color: #ffffff; font-family: 'Poppins', sans-serif;text-transform:capitalize"></div>
-                    <div class="tp-caption tp-resizeme" data-x="['center','center','center','center']" data-hoffset="['0','0','0','0']" data-y="['middle','middle','middle','middle']" data-voffset="['70','70','70','70']" data-fontsize="['22','22','18','18']" data-whitespace="normal" data-responsive_offset="on" data-width="['900px','900px','80%','85%']" data-type="text" data-textalign="['center','center','center','center']" data-transform_idle="o:1;" data-transform_in="z:0;rX:0deg;rY:0;rZ:0;sX:2;sY:2;skX:0;skY:0;opacity:0;s:1000;e:Power2.easeOut;" data-transform_out="s:1000;e:Power3.easeInOut;s:1000;e:Power3.easeInOut;" data-mask_in="x:0px;y:0px;s:inherit;e:inherit;" data-start="1500" data-splitin="none" data-splitout="none" style="z-index:40; font-weight: 100; color: #ffffff; line-height:30px;  font-family: 'Open Sans', sans-serif;text-transform:capitalize">Where Vision Becomes Reality. Every Prompt Is the Beginning of Something Unexpected.</div>
+                    <div class="tp-caption tp-resizeme" data-x="['center','center','center','center']" data-hoffset="['0','0','0','0']" data-y="['middle','middle','middle','middle']" data-voffset="['70','70','70','70']" data-fontsize="['22','22','18','18']" data-whitespace="normal" data-responsive_offset="on" data-width="['900px','900px','80%','85%']" data-type="text" data-textalign="['center','center','center','center']" data-beforeafter="before" data-transform_idle="o:1;" data-transform_in="z:0;rX:0deg;rY:0;rZ:0;sX:2;sY:2;skX:0;skY:0;opacity:0;s:1000;e:Power2.easeOut;" data-transform_out="s:1000;e:Power3.easeInOut;s:1000;e:Power3.easeInOut;" data-mask_in="x:0px;y:0px;s:inherit;e:inherit;" data-start="1500" data-splitin="none" data-splitout="none" style="z-index:4; font-weight: 100; color: #ffffff; line-height:30px;  font-family: 'Open Sans', sans-serif;text-transform:capitalize">Where Vision Becomes Reality. Every Prompt Is the Beginning of Something Unexpected.</div>
+                    <div class="tp-caption tp-resizeme" data-x="['center','center','center','center']" data-hoffset="['0','0','0','0']" data-y="['middle','middle','middle','middle']" data-voffset="['70','70','70','70']" data-fontsize="['22','22','18','18']" data-whitespace="normal" data-responsive_offset="on" data-width="['900px','900px','80%','85%']" data-type="text" data-textalign="['center','center','center','center']" data-beforeafter="after" data-transform_idle="o:1;" data-transform_in="z:0;rX:0deg;rY:0;rZ:0;sX:2;sY:2;skX:0;skY:0;opacity:0;s:1000;e:Power2.easeOut;" data-transform_out="s:1000;e:Power3.easeInOut;s:1000;e:Power3.easeInOut;" data-mask_in="x:0px;y:0px;s:inherit;e:inherit;" data-start="1500" data-splitin="none" data-splitout="none" style="z-index:4; font-weight: 100; color: #ffffff; line-height:30px;  font-family: 'Open Sans', sans-serif;text-transform:capitalize">Where Vision Becomes Reality. Every Prompt Is the Beginning of Something Unexpected.</div>
                     <div class="tp-caption tp-resizeme" id="slide-24-layer-129" data-x="['center','center','center','center']" data-hoffset="['0','0','0','0']" data-y="['bottom','bottom','bottom','bottom']" data-voffset="['140','70','70','130']" data-width="['160','160','160','160']" data-frames='[{"delay":600,"speed":2000,"frame":"0","from":"sX:1;sY:1;opacity:0;fb:40px;","to":"o:1;fb:0;","ease":"Power4.easeInOut"},{"delay":"wait","speed":300,"frame":"999","to":"opacity:0;fb:0;","ease":"Power3.easeInOut"}]' data-textalign="['center','center','center','center']" style="z-index:99; max-width: 960px">
                         <a href="javascript:void(0);" class="scroll btn btn-large btn-rounded btn-blue color-white link">get started</a>
                     </div>
 
                 </li>
                 <!-- Slide 2 -->
-                <li data-index="rs-965" data-transition="fade" data-slotamount="default" data-hideafterloop="0" data-hideslideonmobile="off" data-easein="default" data-easeout="default" data-masterspeed="default" data-thumb="../../assets/parallax/img/night-100x50.jpg" data-rotate="0" data-saveperformance="off" data-title="Slide" data-param1="" data-param2="" data-param3="" data-param4="" data-param5="" data-param6="" data-param7="" data-param8="" data-param9="" data-param10="" data-description="" data-beforeafter='{"moveto":"50%|50%|50%|50%","bgColor":"","bgType":"image","bgImage":"static/picture/slide-02-after.jpg","bgFit":"cover","bgPos":"center center","bgRepeat":"no-repeat","direction":"horizontal","easing":"Power2.easeInOut","delay":"500","time":"750","out":"fade","carousel":false}'>
+                <li data-index="rs-965" data-transition="fade" data-slotamount="default" data-hideafterloop="0" data-hideslideonmobile="off" data-easein="default" data-easeout="default" data-masterspeed="default" data-thumb="../../assets/parallax/img/night-100x50.jpg" data-rotate="0" data-saveperformance="off" data-title="Slide" data-param1="" data-param2="" data-param3="" data-param4="" data-param5="" data-param6="" data-param7="" data-param8="" data-param9="" data-param10="" data-description="" data-beforeafter='{"moveto":"50%|50%|50%|50%","bgColor":"","bgFit":"cover","bgPos":"center center","bgRepeat":"no-repeat","direction":"horizontal","easing":"Power2.easeInOut","delay":"500","time":"750","out":"fade","carousel":false}'>
                     <!-- MAIN IMAGE -->
-                    <img src="static/picture/slide-02-before.jpg" alt="" data-bgposition="center center" data-kenburns="on" data-duration="5000" data-ease="Power4.easeOut" data-scalestart="150" data-scaleend="100" data-rotatestart="0" data-rotateend="0" data-blurstart="30" data-blurend="0" data-offsetstart="0 0" data-offsetend="0 0" data-bgparallax="off" class="rev-slidebg" data-no-retina="">
+                    <img src="static/picture/banner-13.jpg" alt="" data-bgposition="center center" data-kenburns="on" data-duration="5000" data-ease="Power4.easeOut" data-scalestart="150" data-scaleend="100" data-rotatestart="0" data-rotateend="0" data-blurstart="30" data-blurend="0" data-offsetstart="0 0" data-offsetend="0 0" data-bgparallax="off" class="rev-slidebg" data-no-retina="">
                     <!-- LAYERS -->
                     <div class="tp-caption tp-resizeme rs-parallaxlevel-5" data-x="['center','center','center','center']" data-hoffset="['0','0','0','0']" data-y="['middle','middle','middle','middle']" data-voffset="['-140','-140','-140','-140']" data-fontsize="['60','60','60','50']" data-whitespace="nowrap" data-responsive_offset="on" data-width="['none','none','none','none']" data-type="text" data-textalign="['center','center','center','center']" data-beforeafter="before" data-transform_idle="o:1;" data-transform_in="x:-50px;opacity:0;s:2000;e:Power3.easeOut;" data-transform_out="s:1000;e:Power3.easeInOut;s:1000;e:Power3.easeInOut;" data-start="1000" data-splitin="none" data-splitout="none" style="z-index:1; font-weight: 100; color: #ffffff; font-family: 'Poppins', sans-serif;text-transform:capitalize">Some Places</div>
                     <div class="tp-caption tp-resizeme rs-parallaxlevel-5" data-x="['center','center','center','center']" data-hoffset="['0','0','0','0']" data-y="['middle','middle','middle','middle']" data-voffset="['-140','-140','-140','-140']" data-fontsize="['60','60','60','50']" data-whitespace="nowrap" data-responsive_offset="on" data-width="['none','none','none','none']" data-type="text" data-textalign="['center','center','center','center']" data-beforeafter="after" data-transform_idle="o:1;" data-transform_in="x:-50px;opacity:0;s:2000;e:Power3.easeOut;" data-transform_out="s:1000;e:Power3.easeInOut;s:1000;e:Power3.easeInOut;" data-start="1000" data-splitin="none" data-splitout="none" style="z-index:1; font-weight: 100; color: #ffffff; font-family: 'Poppins', sans-serif;text-transform:capitalize">Some Places</div>
@@ -174,7 +208,8 @@
                     <div class="tp-caption tp-resizeme rs-parallaxlevel-5" data-x="['center','center','center','center']" data-hoffset="['0','0','0','0']" data-y="['middle','middle','middle','middle']" data-voffset="['-70','-70','-70','-70']" data-fontsize="['60','60','60','50']" data-whitespace="nowrap" data-responsive_offset="on" data-width="['none','none','none','none']" data-type="text" data-textalign="['center','center','center','center']" data-beforeafter="after" data-transform_idle="o:1;" data-transform_in="z:0;rX:0;rY:0;rZ:0;sX:0.9;sY:0.9;skX:0;skY:0;opacity:0;s:1500;e:Power3.easeInOut;" data-transform_out="y:[100%];s:1000;e:Power2.easeInOut;s:1000;e:Power2.easeInOut;" data-mask_out="x:inherit;y:inherit;s:inherit;e:inherit;" data-start="1200" data-splitin="none" data-splitout="none" style="z-index:2; font-weight: 700; letter-spacing: 1px; color: #ffffff; font-family: 'Poppins', sans-serif;text-transform:capitalize">Never Really</div>
                     <div class="tp-caption tp-resizeme rs-parallaxlevel-5" data-x="['center','center','center','center']" data-hoffset="['0','0','0','0']" data-y="['middle','middle','middle','middle']" data-voffset="['0','0','0','0']" data-fontsize="['60','60','60','50']" data-whitespace="nowrap" data-responsive_offset="on" data-width="['none','none','none','none']" data-type="text" data-textalign="['center','center','center','center']" data-beforeafter="before" data-transform_idle="o:1;" data-transform_in="y:[100%];z:0;rX:0deg;rY:0;rZ:0;sX:1;sY:1;skX:0;skY:0;opacity:0;s:2000;e:Power4.easeInOut;" data-transform_out="s:1000;e:Power2.easeInOut;s:1000;e:Power2.easeInOut;" data-start="1000" data-splitin="none" data-splitout="none" style="z-index:3; font-weight: 100; color: #ffffff; font-family: 'Poppins', sans-serif;text-transform:capitalize">Leave You.</div>
                     <div class="tp-caption tp-resizeme rs-parallaxlevel-5" data-x="['center','center','center','center']" data-hoffset="['0','0','0','0']" data-y="['middle','middle','middle','middle']" data-voffset="['0','0','0','0']" data-fontsize="['60','60','60','50']" data-whitespace="nowrap" data-responsive_offset="on" data-width="['none','none','none','none']" data-type="text" data-textalign="['center','center','center','center']" data-beforeafter="after" data-transform_idle="o:1;" data-transform_in="y:[100%];z:0;rX:0deg;rY:0;rZ:0;sX:1;sY:1;skX:0;skY:0;opacity:0;s:2000;e:Power4.easeInOut;" data-transform_out="s:1000;e:Power2.easeInOut;s:1000;e:Power2.easeInOut;" data-start="1000" data-splitin="none" data-splitout="none" style="z-index:3; font-weight: 100; color: #ffffff; font-family: 'Poppins', sans-serif;text-transform:capitalize">Leave You.</div>
-                    <div class="tp-caption tp-resizeme" data-x="['center','center','center','center']" data-hoffset="['0','0','0','0']" data-y="['middle','middle','middle','middle']" data-voffset="['70','70','70','70']" data-fontsize="['22','22','18','18']" data-whitespace="normal" data-responsive_offset="on" data-width="['900px','900px','80%','85%']" data-type="text" data-textalign="['center','center','center','center']" data-transform_idle="o:1;" data-transform_in="z:0;rX:0deg;rY:0;rZ:0;sX:2;sY:2;skX:0;skY:0;opacity:0;s:1000;e:Power2.easeOut;" data-transform_out="s:1000;e:Power3.easeInOut;s:1000;e:Power3.easeInOut;" data-mask_in="x:0px;y:0px;s:inherit;e:inherit;" data-start="1500" data-splitin="none" data-splitout="none" style="z-index:40; font-weight: 100; color: #ffffff; line-height:30px;  font-family: 'Open Sans', sans-serif;text-transform:capitalize">To Chase the Future, I Left. A Part of Me Never Did.</div>
+                    <div class="tp-caption tp-resizeme" data-x="['center','center','center','center']" data-hoffset="['0','0','0','0']" data-y="['middle','middle','middle','middle']" data-voffset="['70','70','70','70']" data-fontsize="['22','22','18','18']" data-whitespace="normal" data-responsive_offset="on" data-width="['900px','900px','80%','85%']" data-type="text" data-textalign="['center','center','center','center']" data-beforeafter="before" data-transform_idle="o:1;" data-transform_in="z:0;rX:0deg;rY:0;rZ:0;sX:2;sY:2;skX:0;skY:0;opacity:0;s:1000;e:Power2.easeOut;" data-transform_out="s:1000;e:Power3.easeInOut;s:1000;e:Power3.easeInOut;" data-mask_in="x:0px;y:0px;s:inherit;e:inherit;" data-start="1500" data-splitin="none" data-splitout="none" style="z-index:4; font-weight: 100; color: #ffffff; line-height:30px;  font-family: 'Open Sans', sans-serif;text-transform:capitalize">To Chase the Future, I Left. A Part of Me Never Did.</div>
+                    <div class="tp-caption tp-resizeme" data-x="['center','center','center','center']" data-hoffset="['0','0','0','0']" data-y="['middle','middle','middle','middle']" data-voffset="['70','70','70','70']" data-fontsize="['22','22','18','18']" data-whitespace="normal" data-responsive_offset="on" data-width="['900px','900px','80%','85%']" data-type="text" data-textalign="['center','center','center','center']" data-beforeafter="after" data-transform_idle="o:1;" data-transform_in="z:0;rX:0deg;rY:0;rZ:0;sX:2;sY:2;skX:0;skY:0;opacity:0;s:1000;e:Power2.easeOut;" data-transform_out="s:1000;e:Power3.easeInOut;s:1000;e:Power3.easeInOut;" data-mask_in="x:0px;y:0px;s:inherit;e:inherit;" data-start="1500" data-splitin="none" data-splitout="none" style="z-index:4; font-weight: 100; color: #ffffff; line-height:30px;  font-family: 'Open Sans', sans-serif;text-transform:capitalize">To Chase the Future, I Left. A Part of Me Never Did.</div>
                     <div class="tp-caption tp-resizeme" id="slide-24-layer-130" data-x="['center','center','center','center']" data-hoffset="['0','0','0','0']" data-y="['bottom','bottom','bottom','bottom']" data-voffset="['140','70','70','130']" data-width="['160','160','160','160']" data-frames='[{"delay":600,"speed":2000,"frame":"0","from":"sX:1;sY:1;opacity:0;fb:40px;","to":"o:1;fb:0;","ease":"Power4.easeInOut"},{"delay":"wait","speed":300,"frame":"999","to":"opacity:0;fb:0;","ease":"Power3.easeInOut"}]' data-textalign="['center','center','center','center']" style="z-index:99; max-width: 960px">
                         <a href="javascript:void(0);" class="scroll btn btn-large btn-rounded btn-blue color-white link">get started
                         </a>
@@ -182,9 +217,9 @@
 
                 </li>
                 <!-- Slide 3 -->
-                <li data-index="rs-966" data-transition="fade" data-slotamount="default" data-hideafterloop="0" data-hideslideonmobile="off" data-easein="default" data-easeout="default" data-masterspeed="default" data-thumb="../../assets/image/night-100x50.jpg" data-rotate="0" data-saveperformance="off" data-title="Slide" data-param1="" data-param2="" data-param3="" data-param4="" data-param5="" data-param6="" data-param7="" data-param8="" data-param9="" data-param10="" data-description="" data-beforeafter='{"moveto":"50%|50%|50%|50%","bgColor":"","bgType":"image","bgImage":"static/picture/slide-03-after.jpg","bgFit":"cover","bgPos":"center center","bgRepeat":"no-repeat","direction":"horizontal","easing":"Power2.easeInOut","delay":"500","time":"750","out":"fade","carousel":false}'>
+                <li data-index="rs-966" data-transition="fade" data-slotamount="default" data-hideafterloop="0" data-hideslideonmobile="off" data-easein="default" data-easeout="default" data-masterspeed="default" data-thumb="../../assets/image/night-100x50.jpg" data-rotate="0" data-saveperformance="off" data-title="Slide" data-param1="" data-param2="" data-param3="" data-param4="" data-param5="" data-param6="" data-param7="" data-param8="" data-param9="" data-param10="" data-description="" data-beforeafter='{"moveto":"50%|50%|50%|50%","bgColor":"","bgType":"image","bgImage":"creative-piling/images/banner-before.jpg","bgFit":"cover","bgPos":"center center","bgRepeat":"no-repeat","direction":"horizontal","easing":"Power2.easeInOut","delay":"500","time":"750","out":"fade","carousel":false}'>
                     <!-- MAIN IM AGE -->
-                    <img src="static/picture/slide-03-before.jpg" alt="" data-bgposition="center center" data-kenburns="on" data-duration="5000" data-ease="Power4.easeOut" data-scalestart="150" data-scaleend="100" data-rotatestart="0" data-rotateend="0" data-blurstart="30" data-blurend="0" data-offsetstart="0 0" data-offsetend="0 0" data-bgparallax="off" class="rev-slidebg" data-no-retina="">
+                    <img src="static/picture/banner-after.jpg" alt="" data-bgposition="center center" data-kenburns="on" data-duration="5000" data-ease="Power4.easeOut" data-scalestart="150" data-scaleend="100" data-rotatestart="0" data-rotateend="0" data-blurstart="30" data-blurend="0" data-offsetstart="0 0" data-offsetend="0 0" data-bgparallax="off" class="rev-slidebg" data-no-retina="">
                     <!-- LAYERS -->
                     <div class="tp-caption tp-resizeme rs-parallaxlevel-5" data-x="['center','center','center','center']" data-hoffset="['0','0','0','0']" data-y="['middle','middle','middle','middle']" data-voffset="['-140','-140','-140','-140']" data-fontsize="['60','60','60','50']" data-whitespace="nowrap" data-responsive_offset="on" data-width="['none','none','none','none']" data-type="text" data-textalign="['center','center','center','center']" data-beforeafter="before" data-transform_idle="o:1;" data-transform_in="x:-50px;opacity:0;s:2000;e:Power3.easeOut;" data-transform_out="s:1000;e:Power3.easeInOut;s:1000;e:Power3.easeInOut;" data-start="1000" data-splitin="none" data-splitout="none" style="z-index:1; font-weight: 100; color: #ffffff; font-family: 'Poppins', sans-serif;text-transform:capitalize">Between What</div>
                     <div class="tp-caption tp-resizeme rs-parallaxlevel-5" data-x="['center','center','center','center']" data-hoffset="['0','0','0','0']" data-y="['middle','middle','middle','middle']" data-voffset="['-140','-140','-140','-140']" data-fontsize="['60','60','60','50']" data-whitespace="nowrap" data-responsive_offset="on" data-width="['none','none','none','none']" data-type="text" data-textalign="['center','center','center','center']" data-beforeafter="after" data-transform_idle="o:1;" data-transform_in="x:-50px;opacity:0;s:2000;e:Power3.easeOut;" data-transform_out="s:1000;e:Power3.easeInOut;s:1000;e:Power3.easeInOut;" data-start="1000" data-splitin="none" data-splitout="none" style="z-index:1; font-weight: 100; color: #ffffff; font-family: 'Poppins', sans-serif;text-transform:capitalize">Between What</div>
@@ -195,10 +230,11 @@
                     <div class="tp-caption tp-resizeme rs-parallaxlevel-5" data-x="['center','center','center','center']" data-hoffset="['0','0','0','0']" data-y="['middle','middle','middle','middle']" data-voffset="['0','0','0','0']" data-fontsize="['60','60','60','50']" data-whitespace="nowrap" data-responsive_offset="on" data-width="['none','none','none','none']" data-type="text" data-textalign="['center','center','center','center']" data-beforeafter="before" data-transform_idle="o:1;" data-transform_in="y:[100%];z:0;rX:0deg;rY:0;rZ:0;sX:1;sY:1;skX:0;skY:0;opacity:0;s:2000;e:Power4.easeInOut;" data-transform_out="s:1000;e:Power2.easeInOut;s:1000;e:Power2.easeInOut;" data-start="1000" data-splitin="none" data-splitout="none" style="z-index:3; font-weight: 100; color: #ffffff; font-family: 'Poppins', sans-serif;text-transform:capitalize">Will Be.</div>
                     <div class="tp-caption tp-resizeme rs-parallaxlevel-5" data-x="['center','center','center','center']" data-hoffset="['0','0','0','0']" data-y="['middle','middle','middle','middle']" data-voffset="['0','0','0','0']" data-fontsize="['60','60','60','50']" data-whitespace="nowrap" data-responsive_offset="on" data-width="['none','none','none','none']" data-type="text" data-textalign="['center','center','center','center']" data-beforeafter="after" data-transform_idle="o:1;" data-transform_in="y:[100%];z:0;rX:0deg;rY:0;rZ:0;sX:1;sY:1;skX:0;skY:0;opacity:0;s:2000;e:Power4.easeInOut;" data-transform_out="s:1000;e:Power2.easeInOut;s:1000;e:Power2.easeInOut;" data-start="1000" data-splitin="none" data-splitout="none" style="z-index:3; font-weight: 100; color: #ffffff; font-family: 'Poppins', sans-serif;text-transform:capitalize">Will Be.</div>
 
-                    <div class="tp-caption tp-resizeme" data-x="['center','center','center','center']" data-hoffset="['0','0','0','0']" data-y="['middle','middle','middle','middle']" data-voffset="['70','70','70','70']" data-fontsize="['22','22','18','18']" data-whitespace="normal" data-responsive_offset="on" data-width="['900px','900px','80%','85%']" data-type="text" data-textalign="['center','center','center','center']" data-transform_idle="o:1;" data-transform_in="z:0;rX:0deg;rY:0;rZ:0;sX:2;sY:2;skX:0;skY:0;opacity:0;s:1000;e:Power2.easeOut;" data-transform_out="s:1000;e:Power3.easeInOut;s:1000;e:Power3.easeInOut;" data-mask_in="x:0px;y:0px;s:inherit;e:inherit;" data-start="1500" data-splitin="none" data-splitout="none" style="z-index:40; font-weight: 100; color: #ffffff; line-height:30px;  font-family: 'Open Sans', sans-serif;text-transform:capitalize">The Moment Connecting Past and Future.</div>
+                    <div class="tp-caption tp-resizeme" data-x="['center','center','center','center']" data-hoffset="['0','0','0','0']" data-y="['middle','middle','middle','middle']" data-voffset="['70','70','70','70']" data-fontsize="['22','22','18','18']" data-whitespace="normal" data-responsive_offset="on" data-width="['900px','900px','80%','85%']" data-type="text" data-textalign="['center','center','center','center']" data-beforeafter="before" data-transform_idle="o:1;" data-transform_in="z:0;rX:0deg;rY:0;rZ:0;sX:2;sY:2;skX:0;skY:0;opacity:0;s:1000;e:Power2.easeOut;" data-transform_out="s:1000;e:Power3.easeInOut;s:1000;e:Power3.easeInOut;" data-mask_in="x:0px;y:0px;s:inherit;e:inherit;" data-start="1500" data-splitin="none" data-splitout="none" style="z-index:4; font-weight: 100; color: #ffffff; line-height:30px;  font-family: 'Open Sans', sans-serif;text-transform:capitalize">The Moment Connecting Past and Future.</div>
+                    <div class="tp-caption tp-resizeme" data-x="['center','center','center','center']" data-hoffset="['0','0','0','0']" data-y="['middle','middle','middle','middle']" data-voffset="['70','70','70','70']" data-fontsize="['22','22','18','18']" data-whitespace="normal" data-responsive_offset="on" data-width="['900px','900px','80%','85%']" data-type="text" data-textalign="['center','center','center','center']" data-beforeafter="after" data-transform_idle="o:1;" data-transform_in="z:0;rX:0deg;rY:0;rZ:0;sX:2;sY:2;skX:0;skY:0;opacity:0;s:1000;e:Power2.easeOut;" data-transform_out="s:1000;e:Power3.easeInOut;s:1000;e:Power3.easeInOut;" data-mask_in="x:0px;y:0px;s:inherit;e:inherit;" data-start="1500" data-splitin="none" data-splitout="none" style="z-index:4; font-weight: 100; color: #ffffff; line-height:30px;  font-family: 'Open Sans', sans-serif;text-transform:capitalize">The Moment Connecting Past and Future.</div>
 
                     <div class="tp-caption tp-resizeme" id="slide-24-layer-128" data-x="['center','center','center','center']" data-hoffset="['0','0','0','0']" data-y="['bottom','bottom','bottom','bottom']" data-voffset="['140','70','70','130']" data-width="['160','160','160','160']" data-frames='[{"delay":600,"speed":2000,"frame":"0","from":"sX:1;sY:1;opacity:0;fb:40px;","to":"o:1;fb:0;","ease":"Power4.easeInOut"},{"delay":"wait","speed":300,"frame":"999","to":"opacity:0;fb:0;","ease":"Power3.easeInOut"}]' data-textalign="['center','center','center','center']" style="z-index:99; max-width: 960px">
-                        <a href="javascript:void(0);" class="btn btn-large btn-rounded btn-blue color-white link oops-reveal-button" type="button" aria-label="Reveal the after image">Oops.
+                        <a href="javascript:void(0);" class="scroll btn btn-large btn-rounded btn-blue color-white link">get started
                         </a>
                     </div>
 
@@ -636,22 +672,98 @@
 <script src="static/js/jquery.pagepiling.min.js"></script>
 <script src="static/js/swiper-thumbnail.js"></script>
 <script src="static/js/contact_us.js"></script>
-
-<script src="static/js/script.js"></script>
-
-
-<script id="before-after-custom-fixes-js">
+<script>
 (function () {
-    document.addEventListener('click', function (event) {
-        var button = event.target.closest && event.target.closest('.oops-reveal-button');
-        if (!button) return;
-        event.preventDefault();
-        event.stopPropagation();
-        /* The native Before/After slider remains active and centered; only dismiss the prompt. */
-        button.classList.add('is-hidden');
-    }, true);
+    var sliderList = document.querySelector("#main-slider-four > ul");
+    if (!sliderList) return;
+    var slides = Array.prototype.slice.call(sliderList.children).filter(function (node) { return node.tagName === "LI"; });
+    if (slides.length < 2) return;
+    var offset = Math.floor(Math.random() * slides.length);
+    slides.slice(offset).concat(slides.slice(0, offset)).forEach(function (slide) { sliderList.appendChild(slide); });
 })();
 </script>
+<script src="static/js/script.js"></script>
 
+<script>
+(function () {
+    var wrapper = document.getElementById('rev_slider_346_1_wrapper');
+    var slider = document.getElementById('main-slider-four');
+    if (!wrapper || !slider) return;
+
+    var overlay = document.createElement('div');
+    overlay.className = 'cinematic-energy-overlay';
+    overlay.setAttribute('aria-hidden', 'true');
+    var haze = document.createElement('span'); haze.className = 'energy-haze'; overlay.appendChild(haze);
+    var beam = document.createElement('span'); beam.className = 'energy-beam'; overlay.appendChild(beam);
+    for (var i = 0; i < 24; i++) {
+        var particle = document.createElement('span');
+        particle.className = 'energy-particle';
+        particle.style.left = ((i * 37 + 11) % 97) + '%';
+        particle.style.top = ((i * 53 + 7) % 91) + '%';
+        particle.style.setProperty('--particle-x', (((i * 19) % 110) - 55) + 'px');
+        particle.style.setProperty('--particle-y', (((i * 31) % 130) - 65) + 'px');
+        overlay.appendChild(particle);
+    }
+    wrapper.appendChild(overlay);
+
+    var dragging = false;
+    var pointerId = null;
+    var startX = 0;
+    var atFarLeft = false;
+    var waveTimer = null;
+
+    function setSliderPosition(clientX) {
+        var rect = wrapper.getBoundingClientRect();
+        if (!rect.width) return;
+        var position = Math.max(0, Math.min(1, (clientX - rect.left) / rect.width));
+        wrapper.classList.add('energy-slogan-controlled');
+        wrapper.style.setProperty('--energy-level', (1 - position).toFixed(3));
+        // Keep the slogan fully readable on the left half; fade it as the handle moves right.
+        var sloganOpacity = position <= 0.5 ? 1 : Math.max(0, 1 - ((position - 0.5) * 2));
+        wrapper.style.setProperty('--slogan-opacity', sloganOpacity.toFixed(3));
+
+        var reachedLeft = position <= 0.025;
+        if (reachedLeft && !atFarLeft) playEnergyWave();
+        atFarLeft = reachedLeft;
+    }
+
+    function playEnergyWave() {
+        wrapper.classList.remove('energy-wave-active');
+        wrapper.classList.add('slogan-wave-hidden');
+        // Restart CSS animations reliably on each new arrival at the far-left end.
+        void wrapper.offsetWidth;
+        wrapper.classList.add('energy-wave-active');
+        if (waveTimer) window.clearTimeout(waveTimer);
+        waveTimer = window.setTimeout(function () {
+            wrapper.classList.remove('slogan-wave-hidden');
+        }, 1250);
+        window.setTimeout(function () {
+            wrapper.classList.remove('energy-wave-active');
+        }, 1350);
+    }
+
+    slider.addEventListener('pointerdown', function (event) {
+        if (event.target.closest && event.target.closest('a, button, input, textarea, select')) return;
+        dragging = true;
+        pointerId = event.pointerId;
+        startX = event.clientX;
+    }, true);
+
+    document.addEventListener('pointermove', function (event) {
+        if (!dragging || (pointerId !== null && event.pointerId !== pointerId)) return;
+        if (Math.abs(event.clientX - startX) < 3 && !wrapper.classList.contains('energy-slogan-controlled')) return;
+        setSliderPosition(event.clientX);
+    }, { passive: true });
+
+    function stopDragging(event) {
+        if (!dragging) return;
+        if (event && pointerId !== null && event.pointerId !== pointerId) return;
+        dragging = false;
+        pointerId = null;
+    }
+    document.addEventListener('pointerup', stopDragging, true);
+    document.addEventListener('pointercancel', stopDragging, true);
+})();
+</script>
 </body>
 </html>
