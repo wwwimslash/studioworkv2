@@ -624,160 +624,65 @@
 </script>
 
 <style id="slogan-impact-effects">
-  #slogan-effect-layer{position:absolute;inset:0;overflow:hidden;pointer-events:none;z-index:99999;perspective:900px}
-  #slogan-effect-layer .slogan-fragment{position:absolute;display:block;color:#fff;white-space:pre;pointer-events:none;will-change:transform,opacity,filter;text-shadow:0 1px 12px rgba(255,255,255,.12)}
-  #slogan-effect-layer .smoke-fragment{animation:sloganSmokeRise 2.65s cubic-bezier(.15,.65,.3,1) forwards}
-  #slogan-effect-layer .block-fragment{transform-style:preserve-3d;transform-origin:center;animation:sloganBlockFall 2.75s cubic-bezier(.42,0,.8,.45) forwards}
-  @keyframes sloganSmokeRise{0%{opacity:1;filter:blur(0);transform:translate3d(0,0,0) scale(1) rotate(0)}18%{opacity:.95}100%{opacity:0;filter:blur(8px);transform:translate3d(var(--drift),var(--rise),0) scale(.55) rotate(var(--spin))}}
-  @keyframes sloganBlockFall{0%{opacity:1;transform:translate3d(0,0,0) rotateX(0) rotateY(0) rotateZ(0)}35%{opacity:1}58%{opacity:1;transform:translate3d(var(--dx),var(--hit-y),0) rotateX(var(--rx)) rotateY(var(--ry)) rotateZ(var(--rz))}68%{opacity:1;transform:translate3d(var(--dx2),var(--bounce-y),0) rotateX(var(--rx2)) rotateY(var(--ry2)) rotateZ(var(--rz2))}100%{opacity:0;transform:translate3d(var(--fall-x),var(--fall-y),0) rotateX(var(--rx3)) rotateY(var(--ry3)) rotateZ(var(--rz3))}}
+#slogan-effect-layer{position:absolute;inset:0;overflow:hidden;pointer-events:none;z-index:99999;perspective:1100px}
+#slogan-effect-layer canvas{position:absolute;inset:0;width:100%;height:100%;display:block;pointer-events:none}
+#slogan-effect-layer .slogan-fragment{position:absolute;display:block;pointer-events:none;will-change:transform,opacity;transform-style:preserve-3d}
+@media (prefers-reduced-motion:reduce){#slogan-effect-layer{display:none}}
 </style>
 <script id="slogan-impact-effects-script">
 (function(){
   'use strict';
-  var fired = false, dragging = false, startX = 0, previousX = null, root = null;
-  var handleSelectors = '.rs-before-after-burger,.rs-before-after-handle,.rs-before-after-arrow,.rs-before-after-control,[class*="before-after-handle"],[class*="beforeafter-handle"],[class*="before-after-burger"],[class*="beforeafter-burger"]';
-  function getSlider(){ return document.querySelector('#main-slider-four'); }
-  function getRoot(){
-    var slider=getSlider(); if(!slider) return null;
-    return slider.querySelector('.rs-before-after, .rs-beforeafter, [class*="before-after"]') || slider;
-  }
-  function nearCenter(el, x){
-    var r=el.getBoundingClientRect(); return Math.abs(x-(r.left+r.width/2)) < Math.max(100,r.width*.13);
-  }
-  function getActiveSlide(){
-    var slider=getSlider(); if(!slider) return null;
-    return slider.querySelector('li.active-revslide') || slider.querySelector('li[data-index].active') || slider.querySelector('li:not([style*="display: none"])') || slider.querySelector('li');
-  }
-  function isCaption(el){
-    if(!el || !el.matches || !el.matches('.tp-caption,[data-beforeafter]')) return false;
-    return !!(el.textContent || '').trim() && !el.closest('#slogan-effect-layer');
-  }
+  var fired=false, dragging=false, previousX=null, root=null, threePromise=null;
+  var handleSelectors='.rs-before-after-burger,.rs-before-after-handle,.rs-before-after-arrow,.rs-before-after-control,[class*="before-after-handle"],[class*="beforeafter-handle"],[class*="before-after-burger"],[class*="beforeafter-burger"]';
+  function getSlider(){return document.querySelector('#main-slider-four');}
+  function getRoot(){var s=getSlider();if(!s)return null;return s.querySelector('.rs-before-after,.rs-beforeafter,[class*="before-after"]')||s;}
+  function getActiveSlide(){var s=getSlider();if(!s)return null;return s.querySelector('li.active-revslide')||s.querySelector('li[data-index].active')||s.querySelector('li:not([style*="display: none"])')||s.querySelector('li');}
   function collectCaptions(){
-    var slide=getActiveSlide(); if(!slide) return [];
-    var all=Array.prototype.slice.call(slide.querySelectorAll('.tp-caption[data-beforeafter], .tp-caption'));
-    var visible=all.filter(function(el){
-      var r=el.getBoundingClientRect(), cs=getComputedStyle(el);
-      return r.width>0 && r.height>0 && cs.display!=='none' && cs.visibility!=='hidden' && parseFloat(cs.opacity||'1')>.05 && (el.textContent||'').trim() && !el.closest('#slogan-effect-layer');
+    var slide=getActiveSlide();if(!slide)return [];
+    var nodes=Array.prototype.slice.call(slide.querySelectorAll('.tp-caption[data-beforeafter]'));
+    var visible=nodes.filter(function(el){var r=el.getBoundingClientRect(),c=getComputedStyle(el);return r.width>0&&r.height>0&&c.display!=='none'&&c.visibility!=='hidden'&&parseFloat(c.opacity||'1')>.05&&(el.textContent||'').trim();});
+    var seen={},out=[];visible.forEach(function(el){var r=el.getBoundingClientRect(),txt=(el.textContent||'').trim();var key=txt+'|'+Math.round(r.left/5)+'|'+Math.round(r.top/5)+'|'+Math.round(r.width/5);if(!seen[key]){seen[key]=1;out.push({el:el,rect:r,text:txt});}});return out;
+  }
+  function makeLayer(){var s=getSlider();if(!s)return null;var cs=getComputedStyle(s);if(cs.position==='static')s.style.position='relative';var old=document.getElementById('slogan-effect-layer');if(old)old.remove();var l=document.createElement('div');l.id='slogan-effect-layer';s.appendChild(l);return l;}
+  function hideCaptions(items){items.forEach(function(i){i.el.style.setProperty('visibility','hidden','important');});}
+  function canvasSize(layer,rect){var c=document.createElement('canvas');c.width=Math.max(1,Math.round(rect.width*devicePixelRatio));c.height=Math.max(1,Math.round(rect.height*devicePixelRatio));c.style.width=rect.width+'px';c.style.height=rect.height+'px';layer.appendChild(c);return c;}
+  function spawnSmoke(layer,items,sliderRect){
+    var canvas=canvasSize(layer,sliderRect),ctx=canvas.getContext('2d'),dpr=devicePixelRatio||1;ctx.scale(dpr,dpr);
+    items.forEach(function(item){var r=item.rect,st=getComputedStyle(item.el),font=st.font||[st.fontWeight,st.fontSize,st.fontFamily].join(' ');ctx.font=font;ctx.fillStyle=st.color||'#fff';ctx.textBaseline='top';ctx.textAlign=(st.textAlign==='center'?'center':st.textAlign==='right'?'right':'left');var x=r.left-sliderRect.left+(ctx.textAlign==='center'?r.width/2:ctx.textAlign==='right'?r.width:0),y=r.top-sliderRect.top;ctx.fillText(item.text,x,y);});
+    var img=ctx.getImageData(0,0,canvas.width,canvas.height),data=img.data,points=[];var step=Math.max(3,Math.round(4*dpr));
+    for(var y=0;y<canvas.height;y+=step){for(var x=0;x<canvas.width;x+=step){var a=data[(y*canvas.width+x)*4+3];if(a>90&&Math.random()>.18)points.push({x:x/dpr,y:y/dpr,a:a/255,vx:(Math.random()-.5)*38,vy:-45-Math.random()*115,size:.6+Math.random()*1.8,phase:Math.random()*.35});}}
+    ctx.clearRect(0,0,canvas.width,canvas.height);var start=performance.now(),duration=2800;
+    function frame(now){var t=Math.min(1,(now-start)/duration);ctx.clearRect(0,0,canvas.width,canvas.height);points.forEach(function(p){var age=Math.max(0,t-p.phase);if(age<=0)return;var life=Math.max(0,1-age);var px=p.x+p.vx*age+Math.sin(age*5+p.x*.02)*5*age,py=p.y+p.vy*age-18*age*age;ctx.globalAlpha=p.a*life*.8;ctx.fillStyle='rgba(235,244,255,1)';ctx.shadowColor='rgba(205,225,255,.6)';ctx.shadowBlur=7*(1-age);ctx.beginPath();ctx.arc(px*dpr,py*dpr,p.size*dpr*(.8+life*.3),0,Math.PI*2);ctx.fill();});ctx.globalAlpha=1;ctx.shadowBlur=0;if(t<1)requestAnimationFrame(frame);else{ctx.clearRect(0,0,canvas.width,canvas.height);}}
+    requestAnimationFrame(frame);
+  }
+  function loadThree(){if(window.THREE)return Promise.resolve(window.THREE);if(threePromise)return threePromise;threePromise=new Promise(function(resolve,reject){var script=document.createElement('script');script.src='https://cdnjs.cloudflare.com/ajax/libs/three.js/0.128.0/three.min.js';script.onload=function(){window.THREE?resolve(window.THREE):reject(new Error('THREE unavailable'));};script.onerror=function(){reject(new Error('Three.js failed to load'));};document.head.appendChild(script);});return threePromise;}
+  function makeTextTexture(THREE,text,font,color){var c=document.createElement('canvas'),ctx=c.getContext('2d');ctx.font=font;var m=ctx.measureText(text),fs=parseFloat((font.match(/([\d.]+)px/)||[])[1])||32;c.width=Math.max(16,Math.ceil(m.width+12));c.height=Math.max(16,Math.ceil(fs*1.45));ctx.font=font;ctx.textBaseline='middle';ctx.textAlign='center';ctx.fillStyle=color||'#fff';ctx.shadowColor='rgba(255,255,255,.22)';ctx.shadowBlur=2;ctx.fillText(text,c.width/2,c.height/2);var tex=new THREE.CanvasTexture(c);tex.minFilter=THREE.LinearFilter;return {texture:tex,width:m.width||fs*.5,height:fs};}
+  function spawnBlocks(layer,items,sliderRect,THREE){
+    var canvas=canvasSize(layer,sliderRect),renderer=new THREE.WebGLRenderer({canvas:canvas,alpha:true,antialias:true});renderer.setPixelRatio(Math.min(window.devicePixelRatio||1,2));renderer.setSize(sliderRect.width,sliderRect.height,false);renderer.setClearColor(0x000000,0);
+    var scene=new THREE.Scene();scene.fog=new THREE.FogExp2(0x101722,.0014);var camera=new THREE.OrthographicCamera(0,sliderRect.width,sliderRect.height,0,1,3000);camera.position.set(sliderRect.width/2,sliderRect.height/2,1100);camera.lookAt(sliderRect.width/2,sliderRect.height/2,0);
+    scene.add(new THREE.AmbientLight(0xffffff,.92));var key=new THREE.DirectionalLight(0xe8f2ff,1.65);key.position.set(-180,-260,420);scene.add(key);var rim=new THREE.PointLight(0x8cbcff,1.1,1800);rim.position.set(sliderRect.width*.78,sliderRect.height*.18,320);scene.add(rim);
+    var pieces=[];
+    items.forEach(function(item){var r=item.rect,st=getComputedStyle(item.el),fs=parseFloat(st.fontSize)||32,font=st.font||[st.fontWeight,st.fontSize,st.fontFamily].join(' '),text=item.text;var measure=document.createElement('canvas').getContext('2d');measure.font=font;var chars=Array.from(text),total=measure.measureText(text).width||r.width,scale=Math.min(1,r.width/Math.max(total,1)),x0=r.left-sliderRect.left,y0=r.top-sliderRect.top;var cx=x0;
+      var chunks=[];for(var i=0;i<chars.length;){if(/\s/.test(chars[i])){cx+=measure.measureText(chars[i]).width*scale;i++;continue;}var n=Math.random()<.32?1:(Math.random()<.5?2:3),chunk=chars.slice(i,i+n).join(''),w=measure.measureText(chunk).width*scale;if(cx+w>x0+r.width){cx=x0;y0+=fs*1.2;}chunks.push({text:chunk,x:cx,y:y0,w:Math.max(8,w),h:fs*1.04});cx+=w;i+=n;}
+      chunks.forEach(function(ch){var tx=makeTextTexture(THREE,ch.text,font,st.color||'#fff'),w=Math.max(8,ch.w),h=Math.max(10,ch.h),depth=Math.max(5,fs*.16+Math.random()*fs*.12);var geo=new THREE.BoxGeometry(w,h,depth);var side=new THREE.MeshStandardMaterial({color:0x7f91a8,metalness:.62,roughness:.34});var dark=new THREE.MeshStandardMaterial({color:0x263244,metalness:.55,roughness:.4});var front=new THREE.MeshStandardMaterial({map:tx.texture,color:0xffffff,metalness:.12,roughness:.42,transparent:true});var mats=[side,side,dark,dark,front,dark];var mesh=new THREE.Mesh(geo,mats);mesh.position.set(ch.x+w/2,sliderRect.height-(ch.y+h/2),Math.random()*10);mesh.rotation.set((Math.random()-.5)*.12,(Math.random()-.5)*.12,(Math.random()-.5)*.06);scene.add(mesh);pieces.push({mesh,vy:35+Math.random()*60,vx:(Math.random()-.5)*100,vrx:(Math.random()-.5)*3.6,vry:(Math.random()-.5)*4.4,vrz:(Math.random()-.5)*2.2,bounce:.22+Math.random()*.18,delay:Math.random()*.18,alpha:1,texture:tx.texture,hit:false});});
     });
-    if(!visible.length && slide!==getSlider()){
-      visible=Array.prototype.slice.call(getSlider().querySelectorAll('.tp-caption, [data-beforeafter]')).filter(function(el){
-        var r=el.getBoundingClientRect(), cs=getComputedStyle(el);
-        return r.width>0 && r.height>0 && cs.display!=='none' && cs.visibility!=='hidden' && parseFloat(cs.opacity||'1')>.05 && (el.textContent||'').trim() && !el.closest('#slogan-effect-layer');
-      });
-    }
-    // Before/after layers duplicate the same text; use the visible copy at each position only.
-    var seen={}, result=[];
-    visible.forEach(function(el){
-      var r=el.getBoundingClientRect();
-      var key=(el.textContent||'').trim()+'|'+Math.round(r.left/8)+'|'+Math.round(r.top/8);
-      if(!seen[key]){seen[key]=true;result.push({el:el,rect:r,text:(el.textContent||'').trim()});}
-    });
-    return result;
+    // A restrained number of true 3D irregular polyhedra add depth without turning the slogan into confetti.
+    var count=Math.min(34,Math.max(12,Math.floor(pieces.length*.22)));for(var j=0;j<count;j++){var size=3+Math.random()*7,geo=Math.random()<.5?new THREE.IcosahedronGeometry(size,0):new THREE.DodecahedronGeometry(size,0),mat=new THREE.MeshStandardMaterial({color:Math.random()<.5?0x8b9db5:0x536a84,metalness:.7,roughness:.32,transparent:true,opacity:.82});var mesh=new THREE.Mesh(geo,mat);mesh.position.set(Math.random()*sliderRect.width,sliderRect.height*(.25+Math.random()*.45),Math.random()*25);scene.add(mesh);pieces.push({mesh,vy:20+Math.random()*90,vx:(Math.random()-.5)*150,vrx:(Math.random()-.5)*5,vry:(Math.random()-.5)*5,vrz:(Math.random()-.5)*4,bounce:.16+Math.random()*.2,delay:Math.random()*.3,alpha:.82,hit:false});}
+    var start=performance.now(),duration=2950,last=start;function frame(now){var elapsed=(now-start)/1000,dt=Math.min(.035,(now-last)/1000);last=now;var complete=(now-start)>duration;pieces.forEach(function(p){var age=elapsed-p.delay;if(age<0)return;var m=p.mesh;m.position.x+=p.vx*dt;m.position.y-=p.vy*dt;m.rotation.x+=p.vrx*dt;m.rotation.y+=p.vry*dt;m.rotation.z+=p.vrz*dt;p.vy+=420*dt;
+        var floor=sliderRect.height+Math.max(8,m.geometry.parameters&&m.geometry.parameters.height?m.geometry.parameters.height*.35:8);if(m.position.y<floor){m.position.y=floor;if(!p.hit){p.hit=true;p.vy=-Math.abs(p.vy)*p.bounce;p.vx*=.72;p.vrx*=.72;p.vry*=.72;}else{p.vy=Math.max(0,p.vy)*.15;m.position.y+=18*dt;}}
+        if(age>1.45){var fade=Math.min(1,(age-1.45)/1.25);if(Array.isArray(m.material))m.material.forEach(function(ma){if(ma.transparent)ma.opacity=1-fade;});else if(m.material.transparent)m.material.opacity=Math.max(0,p.alpha*(1-fade));}
+      });renderer.render(scene,camera);if(!complete)requestAnimationFrame(frame);else{pieces.forEach(function(p){p.mesh.geometry.dispose();if(p.mesh.material instanceof Array)p.mesh.material.forEach(function(m){if(m.map)m.map.dispose();m.dispose();});else p.mesh.material.dispose();});renderer.dispose();layer.innerHTML='';}}
+    requestAnimationFrame(frame);
   }
-  function makeLayer(){
-    var slider=getSlider(); if(!slider) return null;
-    var layer=document.createElement('div'); layer.id='slogan-effect-layer';
-    var cs=getComputedStyle(slider); if(cs.position==='static') slider.style.position='relative';
-    slider.appendChild(layer); return layer;
-  }
-  function hideCaptions(items){items.forEach(function(item){item.el.style.setProperty('visibility','hidden','important');});}
-  function spawnSmoke(layer,item,sliderRect){
-    var r=item.rect, text=item.text, style=getComputedStyle(item.el);
-    var canvas=document.createElement('canvas'), ctx=canvas.getContext('2d');
-    var font=style.font || (style.fontWeight+' '+style.fontSize+' '+style.fontFamily);
-    ctx.font=font;
-    var chars=Array.from(text), total=ctx.measureText(text).width || r.width;
-    var x=r.left-sliderRect.left, y=r.top-sliderRect.top;
-    var cursor=x;
-    chars.forEach(function(ch,i){
-      var w=ctx.measureText(ch).width || (r.width/Math.max(chars.length,1));
-      if(ch.trim()){
-        var f=document.createElement('span'); f.className='slogan-fragment smoke-fragment'; f.textContent=ch;
-        f.style.left=(cursor+(Math.random()-.5)*5)+'px'; f.style.top=(y+(Math.random()-.5)*4)+'px';
-        f.style.font=font; f.style.fontFamily=style.fontFamily; f.style.fontSize=style.fontSize; f.style.fontWeight=style.fontWeight; f.style.letterSpacing=style.letterSpacing; f.style.color=style.color;
-        f.style.setProperty('--drift',((Math.random()-.5)*130)+'px'); f.style.setProperty('--rise',(-110-Math.random()*190)+'px'); f.style.setProperty('--spin',((Math.random()-.5)*100)+'deg');
-        f.style.animationDelay=(Math.random()*.28)+'s'; layer.appendChild(f);
-      }
-      cursor+=w;
-    });
-  }
-  function spawnBlocks(layer,item,sliderRect){
-    var r=item.rect, text=item.text, style=getComputedStyle(item.el), words=text.split(/(\s+)/).filter(Boolean);
-    var x=r.left-sliderRect.left, y=r.top-sliderRect.top, font=style.font || (style.fontWeight+' '+style.fontSize+' '+style.fontFamily);
-    var measure=document.createElement('canvas').getContext('2d'); measure.font=font;
-    var lineHeight=parseFloat(style.lineHeight)||parseFloat(style.fontSize)*1.25, cursor=x, rowY=y, maxX=x+r.width;
-    words.forEach(function(word,i){
-      if(/^\s+$/.test(word)){cursor+=measure.measureText(word).width;return;}
-      var w=measure.measureText(word).width;
-      if(cursor+w>maxX && cursor>x){cursor=x;rowY+=lineHeight;}
-      // Break long phrases into small, physical-looking word blocks.
-      var chunks=word.length>10 ? word.match(/.{1,4}/g) : [word];
-      chunks.forEach(function(chunk,j){
-        var f=document.createElement('span'); f.className='slogan-fragment block-fragment'; f.textContent=chunk;
-        f.style.left=(cursor+(Math.random()-.5)*3)+'px'; f.style.top=(rowY+(Math.random()-.5)*3)+'px';
-        f.style.font=font; f.style.fontFamily=style.fontFamily; f.style.fontSize=style.fontSize; f.style.fontWeight=style.fontWeight; f.style.letterSpacing=style.letterSpacing; f.style.color=style.color;
-        f.style.padding='0 1px'; f.style.background='rgba(255,255,255,.025)';
-        f.style.setProperty('--dx',((Math.random()-.5)*Math.max(180,r.width*.8))+'px');
-        f.style.setProperty('--hit-y',(Math.max(100,sliderRect.height-rowY-parseFloat(style.fontSize)*.5))+'px');
-        var dx=(Math.random()-.5)*Math.max(180,r.width*.8), rx=(Math.random()-.5)*600, ry=(Math.random()-.5)*600, rz=(Math.random()-.5)*180;
-        f.style.setProperty('--dx',dx+'px'); f.style.setProperty('--dx2',(dx*1.05)+'px'); f.style.setProperty('--fall-x',(dx*1.25)+'px');
-        f.style.setProperty('--hit-y',(Math.max(100,sliderRect.height-rowY-parseFloat(style.fontSize)*.5))+'px');
-        f.style.setProperty('--bounce-y',(Math.max(84,sliderRect.height-rowY-parseFloat(style.fontSize)*.5-16))+'px');
-        f.style.setProperty('--fall-y',(Math.max(160,sliderRect.height-rowY+220+Math.random()*120))+'px');
-        f.style.setProperty('--rx',rx+'deg'); f.style.setProperty('--ry',ry+'deg'); f.style.setProperty('--rz',rz+'deg');
-        f.style.setProperty('--rx2',(rx*1.1)+'deg'); f.style.setProperty('--ry2',(ry*1.1)+'deg'); f.style.setProperty('--rz2',(rz*1.1)+'deg');
-        f.style.setProperty('--rx3',(rx*1.8)+'deg'); f.style.setProperty('--ry3',(ry*1.8)+'deg'); f.style.setProperty('--rz3',(rz*1.8)+'deg');
-        f.style.animationDelay=(Math.random()*.18)+'s'; layer.appendChild(f); cursor+=measure.measureText(chunk).width;
-      });
-      cursor+=Math.max(3,parseFloat(style.fontSize)*.08);
-    });
-  }
-  function trigger(direction){
-    if(fired) return;
-    var slider=getSlider(); if(!slider) return;
-    var items=collectCaptions(); if(!items.length) return;
-    var rect=slider.getBoundingClientRect(), layer=makeLayer(); if(!layer) return;
-    fired=true; dragging=false;
-    hideCaptions(items);
-    items.forEach(function(item){ if(direction==='left') spawnSmoke(layer,item,rect); else spawnBlocks(layer,item,rect); });
-    window.setTimeout(function(){ if(layer && layer.parentNode) layer.parentNode.removeChild(layer); },3400);
-  }
-  function pointerDown(e){
-    if(fired) return;
-    var slider=getSlider(); if(!slider || !slider.contains(e.target)) return;
-    var candidate=e.target && e.target.closest ? e.target.closest(handleSelectors) : null;
-    var ba=e.target && e.target.closest ? e.target.closest('.rs-before-after, .rs-beforeafter, [class*="before-after"]') : null;
-    // Handle class names vary across Revolution Slider builds. If the exact
-    // handle is not identifiable, accept a drag beginning in the slider's
-    // central 70% and determine direction by crossing the true centre line.
-    if(!candidate && !ba){
-      var sr=slider.getBoundingClientRect();
-      if(e.clientX < sr.left+sr.width*.15 || e.clientX > sr.right-sr.width*.15) return;
-    }
-    root=ba || getRoot() || slider; dragging=true; startX=e.clientX; previousX=e.clientX;
-  }
-  function pointerMove(e){
-    if(!dragging || fired || !root) return;
-    var r=root.getBoundingClientRect(), center=r.left+r.width/2, x=e.clientX;
-    if(previousX!==null){
-      if(previousX>=center && x<center) {trigger('left');return;}
-      if(previousX<=center && x>center) {trigger('right');return;}
-    }
-    previousX=x;
-  }
+  function trigger(direction){if(fired)return;var slider=getSlider();if(!slider)return;var items=collectCaptions();if(!items.length)return;var rect=slider.getBoundingClientRect(),layer=makeLayer();if(!layer)return;fired=true;dragging=false;hideCaptions(items);if(direction==='left'){spawnSmoke(layer,items,rect);window.setTimeout(function(){if(layer.parentNode)layer.remove();},3300);}else{loadThree().then(function(THREE){if(layer.isConnected)spawnBlocks(layer,items,rect,THREE);}).catch(function(){// If WebGL library cannot be fetched, keep the slogan hidden rather than replaying the old low-quality text-fall effect.
+      var msg=document.createElement('canvas');msg.width=1;msg.height=1;layer.appendChild(msg);window.setTimeout(function(){if(layer.parentNode)layer.remove();},3000);
+    });}}
+  function pointerDown(e){if(fired)return;var s=getSlider();if(!s||!s.contains(e.target))return;var candidate=e.target&&e.target.closest?e.target.closest(handleSelectors):null;var ba=e.target&&e.target.closest?e.target.closest('.rs-before-after,.rs-beforeafter,[class*="before-after"]'):null;if(!candidate&&!ba){var sr=s.getBoundingClientRect();if(e.clientX<sr.left+sr.width*.15||e.clientX>sr.right-sr.width*.15)return;}root=ba||getRoot()||s;dragging=true;previousX=e.clientX;}
+  function pointerMove(e){if(!dragging||fired||!root)return;var r=root.getBoundingClientRect(),center=r.left+r.width/2,x=e.clientX;if(previousX!==null){if(previousX>=center&&x<center){trigger('left');return;}if(previousX<=center&&x>center){trigger('right');return;}}previousX=x;}
   function stopDrag(){dragging=false;root=null;previousX=null;}
-  document.addEventListener('pointerdown',pointerDown,true);
-  document.addEventListener('pointermove',pointerMove,true);
-  document.addEventListener('pointerup',stopDrag,true);
-  document.addEventListener('pointercancel',stopDrag,true);
-  // Legacy mouse events cover slider/plugin builds that do not emit pointer events.
-  document.addEventListener('mousedown',pointerDown,true);
-  document.addEventListener('mousemove',pointerMove,true);
-  document.addEventListener('mouseup',stopDrag,true);
-  // Touch fallback for older mobile browsers.
-  document.addEventListener('touchstart',function(e){if(!e.touches||!e.touches[0])return;pointerDown({target:e.target,clientX:e.touches[0].clientX});},true);
-  document.addEventListener('touchmove',function(e){if(!e.touches||!e.touches[0])return;pointerMove({clientX:e.touches[0].clientX});},true);
-  document.addEventListener('touchend',stopDrag,true);
+  document.addEventListener('pointerdown',pointerDown,true);document.addEventListener('pointermove',pointerMove,true);document.addEventListener('pointerup',stopDrag,true);document.addEventListener('pointercancel',stopDrag,true);
+  document.addEventListener('mousedown',pointerDown,true);document.addEventListener('mousemove',pointerMove,true);document.addEventListener('mouseup',stopDrag,true);
+  document.addEventListener('touchstart',function(e){if(!e.touches||!e.touches[0])return;pointerDown({target:e.target,clientX:e.touches[0].clientX});},true);document.addEventListener('touchmove',function(e){if(!e.touches||!e.touches[0])return;pointerMove({clientX:e.touches[0].clientX});},true);document.addEventListener('touchend',stopDrag,true);
 })();
 </script>
 
