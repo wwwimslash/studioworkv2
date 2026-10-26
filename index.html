@@ -635,18 +635,18 @@
 (function(){
   'use strict';
   var fired = false, dragging = false, startX = 0, previousX = null, root = null;
-  var handleSelectors = '.rs-before-after-burger,.rs-before-after-handle,.rs-before-after-arrow,.rs-before-after-control,[class*="before-after-handle"],[class*="beforeafter-handle"]';
+  var handleSelectors = '.rs-before-after-burger,.rs-before-after-handle,.rs-before-after-arrow,.rs-before-after-control,[class*="before-after-handle"],[class*="beforeafter-handle"],[class*="before-after-burger"],[class*="beforeafter-burger"]';
   function getSlider(){ return document.querySelector('#main-slider-four'); }
   function getRoot(){
     var slider=getSlider(); if(!slider) return null;
-    return slider.querySelector('.rs-before-after') || slider;
+    return slider.querySelector('.rs-before-after, .rs-beforeafter, [class*="before-after"]') || slider;
   }
   function nearCenter(el, x){
     var r=el.getBoundingClientRect(); return Math.abs(x-(r.left+r.width/2)) < Math.max(100,r.width*.13);
   }
   function getActiveSlide(){
     var slider=getSlider(); if(!slider) return null;
-    return slider.querySelector('li.active-revslide') || slider.querySelector('li:not([style*="display: none"])') || slider.querySelector('li');
+    return slider.querySelector('li.active-revslide') || slider.querySelector('li[data-index].active') || slider.querySelector('li:not([style*="display: none"])') || slider.querySelector('li');
   }
   function isCaption(el){
     if(!el || !el.matches || !el.matches('.tp-caption,[data-beforeafter]')) return false;
@@ -657,8 +657,14 @@
     var all=Array.prototype.slice.call(slide.querySelectorAll('.tp-caption[data-beforeafter], .tp-caption'));
     var visible=all.filter(function(el){
       var r=el.getBoundingClientRect(), cs=getComputedStyle(el);
-      return r.width>0 && r.height>0 && cs.display!=='none' && cs.visibility!=='hidden' && parseFloat(cs.opacity||'1')>.05 && (el.textContent||'').trim();
+      return r.width>0 && r.height>0 && cs.display!=='none' && cs.visibility!=='hidden' && parseFloat(cs.opacity||'1')>.05 && (el.textContent||'').trim() && !el.closest('#slogan-effect-layer');
     });
+    if(!visible.length && slide!==getSlider()){
+      visible=Array.prototype.slice.call(getSlider().querySelectorAll('.tp-caption, [data-beforeafter]')).filter(function(el){
+        var r=el.getBoundingClientRect(), cs=getComputedStyle(el);
+        return r.width>0 && r.height>0 && cs.display!=='none' && cs.visibility!=='hidden' && parseFloat(cs.opacity||'1')>.05 && (el.textContent||'').trim() && !el.closest('#slogan-effect-layer');
+      });
+    }
     // Before/after layers duplicate the same text; use the visible copy at each position only.
     var seen={}, result=[];
     visible.forEach(function(el){
@@ -727,25 +733,28 @@
     });
   }
   function trigger(direction){
-    if(fired) return; fired=true; dragging=false;
+    if(fired) return;
     var slider=getSlider(); if(!slider) return;
     var items=collectCaptions(); if(!items.length) return;
     var rect=slider.getBoundingClientRect(), layer=makeLayer(); if(!layer) return;
+    fired=true; dragging=false;
     hideCaptions(items);
     items.forEach(function(item){ if(direction==='left') spawnSmoke(layer,item,rect); else spawnBlocks(layer,item,rect); });
     window.setTimeout(function(){ if(layer && layer.parentNode) layer.parentNode.removeChild(layer); },3400);
   }
   function pointerDown(e){
     if(fired) return;
+    var slider=getSlider(); if(!slider || !slider.contains(e.target)) return;
     var candidate=e.target && e.target.closest ? e.target.closest(handleSelectors) : null;
-    var r=getRoot(); if(!r) return;
-    // Some plugin versions put the drag hit-area on the before/after root itself.
-    if(!candidate && e.target && e.target.closest){
-      var ba=e.target.closest('.rs-before-after');
-      if(ba && nearCenter(ba,e.clientX)) candidate=ba;
+    var ba=e.target && e.target.closest ? e.target.closest('.rs-before-after, .rs-beforeafter, [class*="before-after"]') : null;
+    // Handle class names vary across Revolution Slider builds. If the exact
+    // handle is not identifiable, accept a drag beginning in the slider's
+    // central 70% and determine direction by crossing the true centre line.
+    if(!candidate && !ba){
+      var sr=slider.getBoundingClientRect();
+      if(e.clientX < sr.left+sr.width*.15 || e.clientX > sr.right-sr.width*.15) return;
     }
-    if(!candidate) return;
-    root=r; dragging=true; startX=e.clientX; previousX=e.clientX;
+    root=ba || getRoot() || slider; dragging=true; startX=e.clientX; previousX=e.clientX;
   }
   function pointerMove(e){
     if(!dragging || fired || !root) return;
@@ -761,6 +770,10 @@
   document.addEventListener('pointermove',pointerMove,true);
   document.addEventListener('pointerup',stopDrag,true);
   document.addEventListener('pointercancel',stopDrag,true);
+  // Legacy mouse events cover slider/plugin builds that do not emit pointer events.
+  document.addEventListener('mousedown',pointerDown,true);
+  document.addEventListener('mousemove',pointerMove,true);
+  document.addEventListener('mouseup',stopDrag,true);
   // Touch fallback for older mobile browsers.
   document.addEventListener('touchstart',function(e){if(!e.touches||!e.touches[0])return;pointerDown({target:e.target,clientX:e.touches[0].clientX});},true);
   document.addEventListener('touchmove',function(e){if(!e.touches||!e.touches[0])return;pointerMove({clientX:e.touches[0].clientX});},true);
