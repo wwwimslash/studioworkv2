@@ -202,7 +202,7 @@
                         <h1 class="mb-4 text-white per-slide wow fadeInRight font-weight-light shining-text">AI Image Restoration</h1>
                         <!--line-->
                         <div class="testimonial-line wow fadeInRight"></div>
-                        <p data-aos="fade-left" class="mb-5 per-slide text-white wow fadeInLeft">Some memories fade. Others were never captured at all. Using AI restoration and creative reconstruction, I bring damaged photographs back to life, recover lost details, and imagine moments that were never photographed — preserving family images and stories that exist only in memory.</p>
+                        <p data-aos="fade-left" class="mb-5 per-slide text-white wow fadeInLeft">Some memories fade. Others were never captured at all. Using AI-powered restoration and creative reconstruction, damaged photographs, lost details, and imagined moments can be brought back to life. From restoring treasured family images to visualizing stories that exist only in memory, every project is crafted to transform ideas, emotions, and moments into something real.</p>
                     </div>
 
                     <!-- Item 2 -->
@@ -213,7 +213,7 @@
                         <h1 class="mb-4 text-white per-slide wow fadeInRight font-weight-light shining-text">AI Development</h1>
                         <!--line-->
                         <div class="testimonial-line wow fadeInRight"></div>
-                        <p data-aos="fade-left" class="mb-5 per-slide text-white wow fadeInLeft">Turning ideas into intelligent tools. I develop AI-enhanced applications that turn complex ideas into practical experiences. One example is Stock Pro, a Return Model &amp; Valuation Engine designed to help investors explore valuation, potential returns, and long-term opportunities.</p>
+                        <p data-aos="fade-left" class="mb-5 per-slide text-white wow fadeInLeft">Turning ideas into intelligent tools. From concept to creation, I develop AI-enhanced applications that transform complex information into meaningful insights. One of my current projects, Return Model &amp; Valuation Engine (Stock Pro), helps investors explore valuation, returns, and long-term opportunities through a clearer and more structured approach. Each project is built to make decisions simpler and possibilities easier to see.</p>
                     </div>
 
                     <!-- Item 3 -->
@@ -224,7 +224,7 @@
                         <h1 class="mb-4 text-white per-slide wow fadeInRight font-weight-light shining-text">AI Video Production</h1>
                         <!--line-->
                         <div class="testimonial-line wow fadeInRight"></div>
-                        <p data-aos="fade-left" class="mb-5 per-slide text-white wow fadeInLeft">Where experience meets possibility. After years of visual storytelling and video production, I see AI as a creative force multiplier — opening new ways to create cinematic visuals, motion design, develop concepts, and experiment beyond traditional boundaries.</p>
+                        <p data-aos="fade-left" class="mb-5 per-slide text-white wow fadeInLeft">Where experience meets possibility. After years of working in visual storytelling and video production, AI has become more than just a tool. It has become a creative force multiplier. By combining industry experience with the latest AI technologies, ideas can move from concept to creation faster than ever before. From cinematic visuals and motion design to creative experimentation, AI unlocks new ways to tell stories, explore concepts, and push creative boundaries. What once required an entire production pipeline can now evolve with unprecedented speed, flexibility, and imagination.</p>
                     </div>
 
                     <!-- Item 4 -->
@@ -235,7 +235,7 @@
                         <h1 class="mb-4 text-white per-slide wow fadeInRight font-weight-light shining-text">Bringing Ideas to Life</h1>
                         <!--line-->
                         <div class="testimonial-line wow fadeInRight"></div>
-                        <p data-aos="fade-left" class="mb-5 per-slide text-white wow fadeInLeft">Creative projects often begin with a simple thought: What if? AI helps turn ideas into visuals, experiences, and solutions — from restoring memories and building intelligent apps to creating new content. Some say AI will destroy humanity. Before that day comes, let's embrace it and have one hell of a final dance.</p>
+                        <p data-aos="fade-left" class="mb-5 per-slide text-white wow fadeInLeft">Creative projects often begin with a simple thought: What if? Today’s AI tools have made it possible to explore ideas that once seemed impossible, transforming imagination into visuals, experiences, and solutions that can be seen, used, and shared. Whether it's restoring memories, building intelligent applications, or creating entirely new forms of content, the possibilities are expanding faster than ever before. If you have an idea, a dream, or a project waiting to be explored, I'd love to hear about it. Some say AI will destroy humanity. Before that day comes, let's embrace it and have one hell of a final dance.</p>
                     </div>
                 </div>
             </div>
@@ -782,6 +782,47 @@
 </script>
 
 <script src="static/js/script.js"></script>
+<script id="services-carousel-timing-controller">
+(function () {
+    'use strict';
+    var DELAY_MS = 15000;
+    var attempts = 0;
+    var poll = window.setInterval(configureServicesCarousel, 200);
+
+    function configureServicesCarousel() {
+        attempts += 1;
+        var $ = window.jQuery;
+        if (!$) {
+            if (attempts > 100) window.clearInterval(poll);
+            return;
+        }
+        var $slider = $('#services_slider');
+        var owl = $slider.length && $slider.data('owl.carousel');
+        if (!owl || !owl.settings) {
+            if (attempts > 100) window.clearInterval(poll);
+            return;
+        }
+
+        window.clearInterval(poll);
+        // Extend the actual initialized carousel's rotation interval.
+        owl.settings.autoplayTimeout = DELAY_MS;
+        if (owl.options) {
+            owl.options.autoplay = true;
+            owl.options.autoplayTimeout = DELAY_MS;
+        }
+        owl.settings.autoplay = true;
+        $slider.trigger('stop.owl.autoplay');
+        $slider.trigger('play.owl.autoplay', [DELAY_MS]);
+
+        // A visitor selecting a dot takes control: show that item and stop auto-rotation.
+        $(document).on('click.servicesCarouselPause', '#services_slider .owl-dot', function () {
+            $slider.trigger('stop.owl.autoplay');
+            owl.settings.autoplay = false;
+            if (owl.options) owl.options.autoplay = false;
+        });
+    }
+})();
+</script>
 
 </body>
 </html>
