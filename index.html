@@ -25,6 +25,60 @@
     <link href="static/css/jquery.pagepiling.css" rel="stylesheet">
     <link rel="stylesheet" href="static/css/pagepiling.css">
     <link href="static/css/style.css" rel="stylesheet">
+    <!-- Team section alignment fixes: preserve the existing carousel and circular layout. -->
+    <style id="team-circle-alignment-fix">
+        #page3 #testimonial-quote .team-img {
+            width: 100%;
+            text-align: center;
+        }
+        #page3 #testimonial-quote .team-img img {
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        #page3 #owl-thumbs.owl-dots {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-wrap: nowrap;
+            gap: 12px;
+        }
+        #page3 #owl-thumbs.owl-dots .owl-dot {
+            box-sizing: border-box;
+            flex: 0 0 56px;
+            width: 56px;
+            min-width: 56px;
+            height: 56px;
+            min-height: 56px;
+            padding: 0;
+            margin: 0;
+            border-radius: 50%;
+            overflow: hidden;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+        #page3 #owl-thumbs.owl-dots .owl-dot img {
+            display: block;
+            width: 23px;
+            height: 23px;
+            max-width: 23px;
+            max-height: 23px;
+            object-fit: contain;
+            margin: 0;
+            opacity: 1;
+        }
+        @media (max-width: 767.98px) {
+            #page3 #owl-thumbs.owl-dots { gap: 10px; }
+            #page3 #owl-thumbs.owl-dots .owl-dot {
+                flex-basis: 50px; width: 50px; min-width: 50px;
+                height: 50px; min-height: 50px;
+            }
+            #page3 #owl-thumbs.owl-dots .owl-dot img {
+                width: 21px; height: 21px; max-width: 21px; max-height: 21px;
+            }
+        }
+    </style>
 </head>
 
 <body data-spy="scroll" data-target=".navbar" data-offset="90">
