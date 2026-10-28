@@ -636,6 +636,68 @@
 </style>
 
 <script src="static/js/script.js"></script>
+<script>
+(function () {
+    'use strict';
+    var DELAY_MS = 15000;
+    var attempts = 0;
+    var poll = window.setInterval(configureServicesCarousel, 200);
+
+    function configureServicesCarousel() {
+        attempts += 1;
+        var $ = window.jQuery;
+        if (!$) {
+            if (attempts > 100) window.clearInterval(poll);
+            return;
+        }
+
+        var $slider = $('#services_slider');
+        if (!$slider.length) {
+            if (attempts > 100) window.clearInterval(poll);
+            return;
+        }
+
+        var owl = $slider.data('owl.carousel');
+        if (!owl || !owl.settings) {
+            if (attempts > 100) window.clearInterval(poll);
+            return;
+        }
+
+        window.clearInterval(poll);
+
+        owl.settings.autoplay = true;
+        owl.settings.autoplayTimeout = DELAY_MS;
+        owl.settings.autoplayHoverPause = true;
+
+        if (owl.options) {
+            owl.options.autoplay = true;
+            owl.options.autoplayTimeout = DELAY_MS;
+            owl.options.autoplayHoverPause = true;
+        }
+
+        $slider.trigger('stop.owl.autoplay');
+        $slider.trigger('play.owl.autoplay', [DELAY_MS]);
+
+        $slider.on('mouseenter', function () {
+            $slider.trigger('stop.owl.autoplay');
+        }).on('mouseleave', function () {
+            $slider.trigger('play.owl.autoplay', [DELAY_MS]);
+        });
+
+        $(document).on('mouseenter.servicesCarouselPause', '#services_slider .owl-dot', function () {
+            $slider.trigger('stop.owl.autoplay');
+        }).on('mouseleave.servicesCarouselPause', '#services_slider .owl-dot', function () {
+            $slider.trigger('play.owl.autoplay', [DELAY_MS]);
+        });
+
+        $(document).on('click.servicesCarouselPause', '#services_slider .owl-dot', function () {
+            $slider.trigger('stop.owl.autoplay');
+            owl.settings.autoplay = false;
+            if (owl.options) owl.options.autoplay = false;
+        });
+    }
+})();
+</script>
 
 </body>
 </html>
