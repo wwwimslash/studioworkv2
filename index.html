@@ -27,22 +27,12 @@
     <link href="static/css/style.css" rel="stylesheet">
     <!-- Team section fixes: center only the main circular image and keep logo thumbnails uniform. -->
     <style id="team-circle-alignment-fix">
-        /* Center the image wrapper only; leave heading and text alignment unchanged. */
+        /* Center the existing image at its original stylesheet-defined size.
+           Do not override the original image dimensions or the text alignment. */
         #page3 #testimonial-quote .team-img {
-            width: 250px;
-            height: 250px;
-            max-width: 100%;
+            display: table;
             margin-left: auto;
             margin-right: auto;
-        }
-        #page3 #testimonial-quote .team-img img {
-            display: block;
-            width: 100%;
-            height: 100%;
-            max-width: 100%;
-            aspect-ratio: 1 / 1;
-            object-fit: cover;
-            border-radius: 50%;
         }
         #page3 #owl-thumbs.owl-dots {
             display: flex;
