@@ -146,19 +146,22 @@ jQuery(function ($) {
     Team Slider
 ====================================== */
 
-    /*Testimonial one slide fade*/
-    $("#testimonial-quote").owlCarousel({
-        items: 1,
-        autoplay: 2500,
-        autoplayHoverPause: true,
-        mouseDrag: false,
-        loop: true,
-        margin: 30,
-        dots: true,
-        dotsContainer: "#owl-thumbs",
-        nav: false,
-        animateIn: "fadeIn",
-        animateOut: "fadeOut",
+    
+/*Testimonial one slide fade*/
+$("#testimonial-quote").owlCarousel({
+    items: 1,
+    autoplay: true,
+    autoplayTimeout: 10000,
+    autoplayHoverPause: true,
+    mouseDrag: false,
+    loop: true,
+    margin: 30,
+    dots: true,
+    dotsContainer: "#owl-thumbs",
+    nav: false,
+    animateIn: "fadeIn",
+    animateOut: "fadeOut",
+
         responsive: {
             1280: {
                 items: 1,
