@@ -174,6 +174,19 @@ $("#testimonial-quote").owlCarousel({
             },
         }
     });
+    
+/* ===================================
+   Team Slider - Pause on Hover
+====================================== */
+
+$('#page3').on('mouseenter.teamPause', function () {
+    $('#testimonial-quote').trigger('stop.owl.autoplay');
+});
+
+$('#page3').on('mouseleave.teamPause', function () {
+    $('#testimonial-quote').trigger('play.owl.autoplay', [10000]);
+});
+
     $("#testimonial-quote-nav").owlCarousel({
         items: 1,
         autoplay: 2500,
