@@ -176,46 +176,16 @@ $("#testimonial-quote").owlCarousel({
     });
     
 /* ===================================
-   Team Slider - Pause on Hover
+   Team Slider - Pause on Logo Hover
 ====================================== */
 
-$('#page3').on('mouseenter.teamPause', function () {
+$('#owl-thumbs').on('mouseenter.teamPause', function () {
     $('#testimonial-quote').trigger('stop.owl.autoplay');
 });
 
-$('#page3').on('mouseleave.teamPause', function () {
+$('#owl-thumbs').on('mouseleave.teamPause', function () {
     $('#testimonial-quote').trigger('play.owl.autoplay', [10000]);
 });
-
-    $("#testimonial-quote-nav").owlCarousel({
-        items: 1,
-        autoplay: 2500,
-        autoplayHoverPause: true,
-        mouseDrag: false,
-        loop: true,
-        margin: 30,
-        animateIn: "fadeIn",
-        animateOut: "fadeOut",
-        dots: true,
-        dotsContainer: "#owl-thumbs",
-        nav: true,
-        navText: ["<i class='fa fa-arrow-left'></i>", "<i class='fa fa-arrow-right'></i>"],
-        responsive: {
-            1280: {
-                items: 1,
-            },
-            600: {
-                items: 1,
-            },
-            320: {
-                items: 1,
-            },
-        }
-    });
-
-/* ===================================
-    Animated Progress Bar
-====================================== */
 
     $(".progress-bar").each(function () {
         $(this).appear(function () {
