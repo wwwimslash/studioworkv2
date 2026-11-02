@@ -88,17 +88,38 @@
         }
     </style>
 <style id="page4-progress-layout-animation">
-    /* Page 4: lower and reduce the six-bar group while preserving its two-column layout. */
+    /* One reduced-size vertical list, offset right of the fixed social icons. */
     #page4 .container > .row > .col-12.my-auto {
-        width: 142.857%;
-        max-width: none;
-        margin-left: -21.4285%;
-        transform: translateY(10vh) scale(.7);
-        transform-origin: center top;
+        width: 100%;
+        max-width: 100%;
+        margin-left: 0;
+        transform: none;
     }
+    #page4 .container > .row > .col-12.my-auto > .row {
+        display: flex;
+        flex-direction: column;
+        width: min(46vw, 620px);
+        margin-left: clamp(76px, 8vw, 112px);
+    }
+    #page4 .container > .row > .col-12.my-auto > .row > .col-md-6 {
+        flex: 0 0 100%;
+        width: 100%;
+        max-width: 100%;
+        padding-right: 0;
+        padding-left: 0;
+    }
+    #page4 .team-progress .progress-item {
+        margin-bottom: 1.4rem;
+        font-size: 70%;
+        letter-spacing: 1.4px;
+    }
+    #page4 .team-progress .progress { height: 8px; margin-top: 8px; }
     #page4 .progress-item .count { font-variant-numeric: tabular-nums; }
     @media (max-width: 767.98px) {
-        #page4 .container > .row > .col-12.my-auto { transform: translateY(5vh) scale(.7); }
+        #page4 .container > .row > .col-12.my-auto > .row {
+            width: 86vw;
+            margin-left: 7vw;
+        }
     }
 </style>
 </head>
@@ -769,6 +790,7 @@
 
 </body>
 </html>
+
 
 
 
