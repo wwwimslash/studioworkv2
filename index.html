@@ -87,6 +87,27 @@
             }
         }
     </style>
+<style id="page4-progress-layout-animation">
+    /* Page 4: lower and reduce the six-bar group while preserving its two-column layout. */
+    #page4 .container > .row > .col-12.my-auto {
+        width: 142.857%;
+        max-width: none;
+        margin-left: -21.4285%;
+        transform: translateY(10vh) scale(.7);
+        transform-origin: center top;
+    }
+    #page4 .team-progress .progress-bar {
+        width: 0;
+        transition: width 1.8s cubic-bezier(.22, .61, .36, 1);
+    }
+    #page4 .progress-item .count { font-variant-numeric: tabular-nums; }
+    @media (max-width: 767.98px) {
+        #page4 .container > .row > .col-12.my-auto { transform: translateY(5vh) scale(.7); }
+    }
+    @media (prefers-reduced-motion: reduce) {
+        #page4 .team-progress .progress-bar { transition-duration: .01ms; }
+    }
+</style>
 </head>
 
 <body data-spy="scroll" data-target=".navbar" data-offset="90">
@@ -689,6 +710,61 @@
   }
 </style>
 
+<script id="page4-progress-animation">
+(function () {
+    var section = document.getElementById('page4');
+    if (!section) return;
+    var items = Array.prototype.slice.call(section.querySelectorAll('.progress-item'));
+    var started = false;
+    var reducedMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    function runAnimation() {
+        if (started) return;
+        started = true;
+        items.forEach(function (item, index) {
+            var bar = item.querySelector('.progress-bar');
+            var count = item.querySelector('.count');
+            var target = Math.max(0, Math.min(100, Number(bar && bar.getAttribute('aria-valuenow')) || 0));
+            if (!bar) return;
+            bar.style.transition = 'none';
+            bar.style.width = '0%';
+            if (count) count.textContent = '0';
+            bar.setAttribute('aria-valuenow', '0');
+            window.setTimeout(function () {
+                bar.style.transition = '';
+                bar.style.width = target + '%';
+                bar.setAttribute('aria-valuenow', String(target));
+                if (reducedMotion || !count) {
+                    if (count) count.textContent = String(target);
+                    return;
+                }
+                var start = null;
+                var duration = 1800;
+                function tick(time) {
+                    if (start === null) start = time;
+                    var progress = Math.min(1, (time - start) / duration);
+                    var eased = 1 - Math.pow(1 - progress, 3);
+                    count.textContent = String(Math.round(target * eased));
+                    if (progress < 1) window.requestAnimationFrame(tick);
+                }
+                window.requestAnimationFrame(tick);
+            }, reducedMotion ? 0 : index * 140);
+        });
+    }
+
+    if ('IntersectionObserver' in window) {
+        var observer = new IntersectionObserver(function (entries) {
+            if (entries.some(function (entry) { return entry.isIntersecting; })) {
+                runAnimation();
+                observer.disconnect();
+            }
+        }, { threshold: 0.15 });
+        observer.observe(section);
+    } else {
+        runAnimation();
+    }
+})();
+</script>
 <script src="static/js/script.js"></script>
 <script>
 (function () {
@@ -755,3 +831,5 @@
 
 </body>
 </html>
+
+
