@@ -88,18 +88,21 @@
         }
     </style>
 <style id="page4-progress-layout-animation">
-    /* One reduced-size vertical list, offset right of the fixed social icons. */
+    #page4 > .container > .row { position: relative; }
     #page4 .container > .row > .col-12.my-auto {
+        position: absolute;
+        top: calc(50% - 68px);
+        left: 0;
         width: 100%;
         max-width: 100%;
-        margin-left: 0;
+        margin: 0;
         transform: none;
     }
     #page4 .container > .row > .col-12.my-auto > .row {
         display: flex;
         flex-direction: column;
-        width: min(46vw, 620px);
-        margin-left: clamp(76px, 8vw, 112px);
+        width: min(26.6vw, 378px);
+        margin-left: 100px;
     }
     #page4 .container > .row > .col-12.my-auto > .row > .col-md-6 {
         flex: 0 0 100%;
@@ -108,18 +111,111 @@
         padding-right: 0;
         padding-left: 0;
     }
+    #page4 .page4-ingredients {
+        position: absolute;
+        z-index: 2;
+        top: 0;
+        bottom: 0;
+        left: 42px;
+        width: 69px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        pointer-events: none;
+    }
+    #page4 .page4-ingredients span {
+        display: inline-block;
+        flex-shrink: 0;
+        white-space: nowrap;
+        color: #fff;
+        font-size: 14px;
+        font-weight: 500;
+        letter-spacing: 3px;
+        transform: rotate(-90deg);
+        text-shadow: 0 1px 3px rgba(0, 0, 0, .85);
+    }
+    #page4 .page4-ingredients::before,
+    #page4 .page4-ingredients::after {
+        content: "";
+        position: absolute;
+        left: 50%;
+        width: 1px;
+        background: #fff;
+        opacity: .9;
+        transform: translateX(-50%);
+    }
+    #page4 .page4-ingredients::before {
+        top: var(--ingredients-top-start, 0px);
+        height: var(--ingredients-top-length, 0px);
+    }
+    #page4 .page4-ingredients::after {
+        top: var(--ingredients-bottom-start, 0px);
+        height: var(--ingredients-bottom-length, 0px);
+    }
     #page4 .team-progress .progress-item {
         margin-bottom: 1.4rem;
-        font-size: 70%;
-        letter-spacing: 1.4px;
+        font-size: 100%;
+        letter-spacing: 2px;
     }
-    #page4 .team-progress .progress { height: 8px; margin-top: 8px; }
+    #page4 .team-progress .progress {
+        position: relative;
+        height: 8px;
+        margin-top: 8px;
+        overflow: visible;
+        background-color: transparent;
+    }
+    #page4 .team-progress .progress-bar {
+        position: relative;
+        overflow: visible;
+        width: 0;
+        background: #21c2c2;
+        filter: none;
+        transition: width 1.8s cubic-bezier(.22, .61, .36, 1);
+    }
+    #page4 .team-progress .progress .count {
+        position: absolute;
+        z-index: 2;
+        top: 50%;
+        left: 0;
+        transform: translate(8px, -50%);
+        white-space: nowrap;
+        font-size: 100%;
+        line-height: 1;
+        background: transparent;
+        text-shadow: 0 1px 3px rgba(0, 0, 0, .85);
+        transition: left 1.8s cubic-bezier(.22, .61, .36, 1);
+    }
+    #page4 .team-progress .progress .count::after { content: "%"; }
+    #page4 .page4-static-copy .testimonial-line { width: 140px; opacity: 1; }
     #page4 .progress-item .count { font-variant-numeric: tabular-nums; }
-    @media (max-width: 767.98px) {
-        #page4 .container > .row > .col-12.my-auto > .row {
-            width: 86vw;
-            margin-left: 7vw;
+    @media (prefers-reduced-motion: reduce) {
+        #page4 .team-progress .progress-bar,
+        #page4 .team-progress .progress .count { transition-duration: .01ms; }
+    }
+    @media (min-width: 1200px) {
+        #page4 .container > .row > .col-12.my-auto {
+            left: calc(570px - 50vw);
+            width: 100vw;
         }
+    }
+    @media (min-width: 1020px) and (max-width: 1199.98px) {
+        #page4 .container > .row > .col-12.my-auto > .row {
+            width: min(29.4vw, 378px);
+            margin-left: 6vw;
+        }
+        #page4 .page4-ingredients { display: none; }
+    }
+    @media (max-width: 1019.98px) {
+        #page4 .container > .row > .col-12.my-auto {
+            position: relative;
+            top: auto;
+            left: auto;
+        }
+        #page4 .container > .row > .col-12.my-auto > .row {
+            width: min(63%, 308px);
+            margin: 0 auto;
+        }
+        #page4 .page4-ingredients { display: none; }
     }
 </style>
 </head>
@@ -409,27 +505,28 @@
     <div class="container h-100">
         <div class="row h-100">
             <div class="col-12 my-auto">
+                <div class="page4-ingredients" aria-label="Ingredients"><span>INGREDIENTS</span></div>
                 <div class="row">
                     <div class="col-md-6">
                         <ul class="team-progress text-left p-0 m-0">
                             <!--Progress Item-->
                             <li class="progress-item">
-                                <h6 class="text-white ">Project Management <span class="float-right"><b class="count text-white">90</b>%</span></h6>
+                                <h6 class="text-white">AI Brainstorming</h6>
                                 <div class="progress">
-                                    <span class="progress-bar" role="progressbar" aria-valuenow="90" aria-valuemin="0" aria-valuemax="100"></span>
+                                    <span class="progress-bar" role="progressbar" aria-valuenow="15" aria-valuemin="0" aria-valuemax="100"></span><b class="count text-white" aria-hidden="true">15</b>
                                 </div>
                             </li>
                             <!--Progress Item-->
                             <li class="progress-item">
-                                <h6 class="text-white">Web Consulting<span class="float-right"><b class="count text-white">75</b>%</span></h6>
+                                <h6 class="text-white">Art Direction</h6>
                                 <div class="progress">
-                                    <span class="progress-bar" role="progressbar" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100"></span>
+                                    <span class="progress-bar" role="progressbar" aria-valuenow="70" aria-valuemin="0" aria-valuemax="100"></span><b class="count text-white" aria-hidden="true">70</b>
                                 </div>
                             </li>
                             <li class="progress-item">
-                                <h6 class="text-white">Web Consulting<span class="float-right"><b class="count text-white">62</b>%</span></h6>
+                                <h6 class="text-white">Design &amp; Development</h6>
                                 <div class="progress">
-                                    <span class="progress-bar" role="progressbar" aria-valuenow="62" aria-valuemin="0" aria-valuemax="100"></span>
+                                    <span class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"></span><b class="count text-white" aria-hidden="true">60</b>
                                 </div>
                             </li>
                         </ul>
@@ -438,28 +535,38 @@
                         <ul class="team-progress text-left p-0 m-0">
                             <!--Progress Item-->
                             <li class="progress-item">
-                                <h6 class="text-white">Project Management <span class="float-right"><b class="count text-white">90</b>%</span></h6>
+                                <h6 class="text-white">AI Programming</h6>
                                 <div class="progress">
-                                    <span class="progress-bar" role="progressbar" aria-valuenow="90" aria-valuemin="0" aria-valuemax="100"></span>
+                                    <span class="progress-bar" role="progressbar" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></span><b class="count text-white" aria-hidden="true">50</b>
                                 </div>
                             </li>
                             <!--Progress Item-->
                             <li class="progress-item">
-                                <h6 class="text-white">Web Consulting<span class="float-right"><b class="count text-white">75</b>%</span></h6>
+                                <h6 class="text-white">AI Visual Creation</h6>
                                 <div class="progress">
-                                    <span class="progress-bar" role="progressbar" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100"></span>
+                                    <span class="progress-bar" role="progressbar" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></span><b class="count text-white" aria-hidden="true">50</b>
                                 </div>
                             </li>
                             <li class="progress-item m-0">
-                                <h6 class="text-white">Web Consulting<span class="float-right"><b class="count text-white">62</b>%</span></h6>
+                                <h6 class="text-white">Final Creation</h6>
                                 <div class="progress">
-                                    <span class="progress-bar" role="progressbar" aria-valuenow="62" aria-valuemin="0" aria-valuemax="100"></span>
+                                    <span class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"></span><b class="count text-white" aria-hidden="true">60</b>
                                 </div>
                             </li>
                         </ul>
                     </div>
                 </div>
             </div>
+        
+<div class="offset-md-6 col-md-6 my-auto page4-copy">
+    <div class="services-item item text-center text-md-right page4-static-copy">
+        <h1 class="mb-4 text-white font-weight-light shining-text">Art Drives Artificial Intelligence</h1>
+        <div class="testimonial-line"></div>
+        <p class="mb-4 text-white">We are an independent creative team where art meets artificial intelligence. Driven by imagination, curiosity, and technological innovation, we explore new forms of digital expression, transforming ideas into compelling visual experiences and meaningful digital creations. By combining human intuition with intelligent technologies and pushing beyond traditional boundaries, we turn bold ideas into extraordinary realities where human creativity and artificial intelligence collide, challenge boundaries, and create what neither could achieve alone.</p>
+        <p class="mb-2 text-white">We don't just follow what's next. We create what's possible.</p>
+        <p class="mb-0 text-white font-weight-bold">The ImSlash Team</p>
+    </div>
+</div>
         </div>
     </div>
 </section>
@@ -725,6 +832,119 @@
 </style>
 
 <script src="static/js/script.js"></script>
+<script id="page4-ingredients-fit">
+(function () {
+    var section = document.getElementById('page4');
+    if (!section) return;
+    var label = section.querySelector('.page4-ingredients span');
+    var labelSlot = section.querySelector('.page4-ingredients');
+    var group = section.querySelector('.container > .row > .col-12.my-auto > .row');
+    var column = section.querySelector('.container > .row > .col-12.my-auto');
+    var icon = document.querySelector('.slider-social a');
+    if (!label || !labelSlot || !group || !column) return;
+
+    function fitLabel() {
+        if (window.getComputedStyle(labelSlot).display === 'none') return;
+        if (icon && window.getComputedStyle(icon).display !== 'none') {
+            group.style.marginLeft = '100px';
+            var iconRight = icon.getBoundingClientRect().right;
+            var barLeft = group.querySelector('.progress').getBoundingClientRect().left;
+            var labelLeft = iconRight + 4;
+            var labelWidth = barLeft - labelLeft - 4;
+            if (labelWidth < 16) {
+                group.style.marginLeft = (100 + 16 - labelWidth) + 'px';
+                barLeft = group.querySelector('.progress').getBoundingClientRect().left;
+                labelWidth = barLeft - labelLeft - 4;
+            }
+            labelSlot.style.left = (labelLeft - column.getBoundingClientRect().left) + 'px';
+            labelSlot.style.width = labelWidth + 'px';
+        }
+
+        label.style.transform = 'none';
+        label.style.width = 'auto';
+        var groupHeight = group.getBoundingClientRect().height;
+        if (groupHeight > 0) {
+            label.style.width = groupHeight + 'px';
+            label.style.textAlign = 'center';
+            var textHeight = label.getBoundingClientRect().height;
+            var horizontalScale = labelSlot.clientWidth / textHeight;
+            label.style.transform = 'scaleX(' + horizontalScale + ') rotate(-90deg)';
+            var slotRect = labelSlot.getBoundingClientRect();
+            var groupRect = group.getBoundingClientRect();
+            var range = document.createRange();
+            range.selectNodeContents(label);
+            var textRect = range.getBoundingClientRect();
+            labelSlot.style.setProperty('--ingredients-top-start', (groupRect.top - slotRect.top) + 'px');
+            labelSlot.style.setProperty('--ingredients-top-length', Math.max(0, textRect.top - groupRect.top - 4) + 'px');
+            labelSlot.style.setProperty('--ingredients-bottom-start', (textRect.bottom - slotRect.top + 4) + 'px');
+            labelSlot.style.setProperty('--ingredients-bottom-length', Math.max(0, groupRect.bottom - textRect.bottom - 4) + 'px');
+        }
+    }
+    window.addEventListener('load', fitLabel);
+    window.addEventListener('resize', fitLabel);
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(fitLabel);
+})();
+</script><script id="page4-progress-animation">
+(function () {
+    var section = document.getElementById('page4');
+    if (!section) return;
+
+    var items = Array.prototype.slice.call(section.querySelectorAll('.progress-item'));
+    var reducedMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var wasActive = false;
+
+    function animateBars() {
+        items.forEach(function (item, index) {
+            var bar = item.querySelector('.progress-bar');
+            var count = item.querySelector('.count');
+            if (!bar) return;
+
+            var target = Math.max(0, Math.min(100, Number(bar.getAttribute('aria-valuenow')) || 0));
+            var delay = reducedMotion ? 0 : index * 120;
+
+            if (window.jQuery) window.jQuery(bar).stop(true).css('width', '0%');
+            bar.style.transition = 'none';
+            bar.style.width = '0%';
+            if (count) { count.textContent = '0'; count.style.transition = 'none'; count.style.left = '0%'; }
+            void bar.offsetWidth;
+
+            window.setTimeout(function () {
+                if (!reducedMotion) {
+                    bar.style.transition = 'width 1.8s cubic-bezier(.22, .61, .36, 1)';
+                    if (count) count.style.transition = 'left 1.8s cubic-bezier(.22, .61, .36, 1)';
+                }
+                window.requestAnimationFrame(function () {
+                    bar.style.width = target + '%';
+                    if (count) count.style.left = target + '%';
+                });
+
+                if (reducedMotion || !count) {
+                    if (count) { count.textContent = String(target); count.style.left = target + '%'; }
+                    return;
+                }
+                var start = null;
+                function updateCount(time) {
+                    if (start === null) start = time;
+                    var progress = Math.min(1, (time - start) / 1800);
+                    var eased = 1 - Math.pow(1 - progress, 3);
+                    count.textContent = String(Math.round(target * eased));
+                    if (progress < 1) window.requestAnimationFrame(updateCount);
+                }
+                window.requestAnimationFrame(updateCount);
+            }, delay);
+        });
+    }
+
+    function checkPage() {
+        var active = section.classList.contains('active');
+        if (active && !wasActive) animateBars();
+        wasActive = active;
+    }
+
+    new MutationObserver(checkPage).observe(section, { attributes: true, attributeFilter: ['class'] });
+    checkPage();
+})();
+</script>
 <script>
 (function () {
     'use strict';
@@ -790,6 +1010,43 @@
 
 </body>
 </html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
