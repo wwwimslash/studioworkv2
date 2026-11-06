@@ -1517,6 +1517,46 @@ div[data-title="THE QUEEN"] {
     margin: 0 auto;
 }
 
+/* Page 6: compact contact form positioned in the lower center. */
+#page6 .contact-body {
+    height: 100%;
+    display: flex;
+    align-items: flex-end;
+    padding-bottom: 8vh;
+}
+
+#page6 .contact-body > .row {
+    width: 100%;
+    margin-right: 0;
+    margin-left: 0;
+    justify-content: center;
+}
+
+#page6 .contact-form-center {
+    flex: 0 0 50%;
+    width: 50%;
+    max-width: 475px;
+    margin: 0 auto;
+}
+
+#page6 .contact-form-textfield.pb-4 {
+    padding-bottom: .5rem !important;
+}
+
+#page6 .company-contact-form .form-control {
+    padding-top: .75rem;
+    padding-bottom: .75rem;
+}
+
+#page6 .company-contact-form textarea.form-control.message {
+    height: 60px;
+    min-height: 60px;
+}
+
+#page6 .contact-form-center .pt-xs-25px {
+    padding-top: .5rem;
+}
+
 .company-contact-form .form-control, .company-contact-form .form-control:focus {
     background-color: transparent;
 }
@@ -2041,6 +2081,8 @@ footer.bg-black2 {
     .bg-services, .bg-team, .bg-skills, .portfolio-sec, .bg-contact {height: auto; padding: 8rem 0; text-align: center;}
     .portfolio-sec {padding: 0; text-align: center;}
     .bg-contact {padding: 4rem 0; text-align: center;}
+    #page6 .contact-body {padding-bottom: 5vh;}
+    #page6 .contact-form-center {flex-basis: 82%; width: 82%; max-width: 475px;}
     .swiper-thumbnails {display: none;}
     #services_slider h1{font-size: 1.75rem;}
     .logo-dark {margin-left: 20px;}
