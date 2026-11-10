@@ -1602,9 +1602,17 @@ div[data-title="THE QUEEN"] {
 
 #page6 .contact-form-textfield input,
 #page6 .contact-form-textfield textarea {
-    background-color: rgba(36, 196, 244, .18) !important;
+    background-color: #303030 !important;
     border-radius: 6px;
-    border-color: #24c4f4;
+    border-color: #b8b8b8;
+    font-weight: 700;
+}
+
+#page6 .contact-form-textfield input::placeholder,
+#page6 .contact-form-textfield textarea::placeholder,
+#page6 .contact-form-textfield input::-webkit-input-placeholder,
+#page6 .contact-form-textfield textarea::-webkit-input-placeholder {
+    font-weight: 700;
 }
 
 #page6 .contact-form-textfield input:focus,
