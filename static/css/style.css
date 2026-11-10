@@ -199,7 +199,7 @@ a:active, a:hover, a {
     width: 100%;
 }
 
-.logo-dark {max-width: 100%;}
+.logo-dark {width: 79px; height: auto; max-width: 100%;}
 
 /* Side Menu */
 .side-menu {
