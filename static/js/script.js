@@ -174,18 +174,35 @@ $("#testimonial-quote").owlCarousel({
             },
         }
     });
-    
+    $("#testimonial-quote-nav").owlCarousel({
+        items: 1,
+        autoplay: 2500,
+        autoplayHoverPause: true,
+        mouseDrag: false,
+        loop: true,
+        margin: 30,
+        animateIn: "fadeIn",
+        animateOut: "fadeOut",
+        dots: true,
+        dotsContainer: "#owl-thumbs",
+        nav: true,
+        navText: ["<i class='fa fa-arrow-left'></i>", "<i class='fa fa-arrow-right'></i>"],
+        responsive: {
+            1280: {
+                items: 1,
+            },
+            600: {
+                items: 1,
+            },
+            320: {
+                items: 1,
+            },
+        }
+    });
+
 /* ===================================
-   Team Slider - Pause on Logo Hover
+    Animated Progress Bar
 ====================================== */
-
-$('#owl-thumbs').on('mouseenter.teamPause', function () {
-    $('#testimonial-quote').trigger('stop.owl.autoplay');
-});
-
-$('#owl-thumbs').on('mouseleave.teamPause', function () {
-    $('#testimonial-quote').trigger('play.owl.autoplay', [10000]);
-});
 
     $(".progress-bar").each(function () {
         $(this).appear(function () {
@@ -494,6 +511,51 @@ $('#owl-thumbs').on('mouseleave.teamPause', function () {
             cursor: "move",
             carousel: false
         });
+
+        // Match Page 6's button to the actual rendered size of Page 1's CTA.
+        var page6Cta = document.querySelector("#page6 #submit_btn");
+        var page6CtaSyncQueued = false;
+        var page6CtaSyncAttempts = 0;
+        var syncPage6CtaToSlider = function() {
+            page6CtaSyncQueued = false;
+            var sliderCta = mainSlider.find(".active-revslide .tp-caption a.btn-blue")[0] ||
+                mainSlider.find(".tp-caption a.btn-blue")[0];
+
+            if (!page6Cta || !sliderCta) return;
+
+            var rendered = sliderCta.getBoundingClientRect();
+            var baseWidth = sliderCta.offsetWidth;
+            var baseHeight = sliderCta.offsetHeight;
+
+            if (!rendered.width || !rendered.height || !baseWidth || !baseHeight) {
+                if (page6CtaSyncAttempts++ < 120) {
+                    window.setTimeout(queuePage6CtaSync, 50);
+                }
+                return;
+            }
+
+            page6Cta.style.width = baseWidth + "px";
+            page6Cta.style.height = baseHeight + "px";
+            page6Cta.style.transform = "scale(" + (rendered.width / baseWidth) + ", " + (rendered.height / baseHeight) + ")";
+        };
+        var queuePage6CtaSync = function() {
+            if (page6CtaSyncQueued) return;
+            page6CtaSyncQueued = true;
+            window.requestAnimationFrame(syncPage6CtaToSlider);
+        };
+
+        queuePage6CtaSync();
+        window.addEventListener("resize", queuePage6CtaSync);
+        if (window.ResizeObserver) {
+            new ResizeObserver(queuePage6CtaSync).observe(mainSlider[0]);
+        }
+        if (window.MutationObserver) {
+            new MutationObserver(queuePage6CtaSync).observe(mainSlider[0], {
+                attributes: true,
+                subtree: true,
+                attributeFilter: ["class", "style"]
+            });
+        }
 
     };
 });
