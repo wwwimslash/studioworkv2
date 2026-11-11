@@ -199,7 +199,7 @@ a:active, a:hover, a {
     width: 100%;
 }
 
-.logo-dark {width: 79px; height: auto; max-width: 100%;}
+.logo-dark {width: 100px; height: auto; max-width: 100%;}
 
 /* Side Menu */
 .side-menu {
@@ -1592,12 +1592,22 @@ div[data-title="THE QUEEN"] {
     padding: 0;
 }
 
-#page6 #submit_btn {
+#page6 #submit_btn.page6-scale-with-slider {
+    box-sizing: border-box;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
     width: 160px;
     height: 47px;
     padding: 9px 8px;
     line-height: 25px;
     white-space: nowrap;
+    transform-origin: right bottom;
+}
+
+#page6 #submit_btn.page6-scale-with-slider b {
+    font-size: 13px;
+    line-height: 1;
 }
 
 #page6 .contact-form-textfield input,
@@ -2147,7 +2157,6 @@ footer.bg-black2 {
     #page6 .contact-body {padding-bottom: calc(5vh - 20px);}
     #page6 .contact-form-center {flex-basis: 82%; width: 82%; max-width: 475px;}
     #page6 .contact-form-center .pt-xs-25px {right: 50px; bottom: 5vh;}
-    #page6 #submit_btn {width: 160px;}
     .swiper-thumbnails {display: none;}
     #services_slider h1{font-size: 1.75rem;}
     .logo-dark {margin-left: 20px;}
