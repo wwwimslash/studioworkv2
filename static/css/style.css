@@ -1083,8 +1083,8 @@ a:active, a:hover, a {
     height: 100%;
     display: table;
     pointer-events: none;
-    transform: translateY(-30vh);
-    -webkit-transform: translateY(-30vh);
+    transform: translateY(-10vh);
+    -webkit-transform: translateY(-10vh);
 }
 
 #showcase-holder .showcase-pagination {
@@ -1325,9 +1325,9 @@ a:active, a:hover, a {
 
 .swiper-thumbnails {
     position: absolute;
-    left: 29%;
+    left: 50%;
     bottom: 10%;
-    transform: translateX(50%);
+    transform: translateX(-50%);
 }
 
 .bullet {
@@ -1374,6 +1374,12 @@ a:active, a:hover, a {
     -ms-transform: scale(.95);
     -o-transform: scale(.95);
     transform: scale(.95);
+}
+
+/* Keep the first overlapping thumbnail inside the centered strip's bounds. */
+.swiper-thumbnails .bullet:first-child,
+.swiper-thumbnails .bullet.is-active:first-child {
+    margin-left: 0;
 }
 
 .swiper-thumbnails .bullet:hover {
@@ -2080,7 +2086,6 @@ footer.bg-black2 {
 
 @media screen and (max-width:1199px) {
 
-    .swiper-thumbnails { left: 24%;}
     .header-appear .side-nav-btn{left: 15px;}
     .side-logo-nav .social_icons{display: none}
     .top-fixed-nav .collapse .mr-0{margin-right: -30px !important;right: 0 !important;}
@@ -2135,7 +2140,6 @@ footer.bg-black2 {
 
 @media screen and (max-width:991px) {
 
-    .swiper-thumbnails { left: 12%;}
     .inner-wrapper .navbar-nav {-ms-flex-direction: column;flex-direction: column;}
     .side-nav .navbar-nav .nav-item{margin: 9px auto;}
     .side-menu.side-btn-style2 .btn-close{left: auto;right: 47px;}
